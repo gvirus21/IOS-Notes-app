@@ -17,11 +17,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b74-nG-B4k">
-                                <rect key="frame" x="44" y="0.0" width="808" height="414"/>
+                                <rect key="frame" x="0.0" y="0.0" width="896" height="414"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZ9-ID-kA2">
-                                        <rect key="frame" x="139" y="404" width="136" height="88"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Notes" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AZ9-ID-kA2">
+                                        <rect key="frame" x="380" y="176" width="136" height="62.5"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="52"/>
                                         <color key="textColor" systemColor="tertiarySystemBackgroundColor"/>
                                         <nil key="highlightedColor"/>
@@ -29,14 +28,18 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="labelColor"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="AZ9-ID-kA2" firstAttribute="centerY" secondItem="b74-nG-B4k" secondAttribute="centerY" id="CSA-em-Y87"/>
+                                    <constraint firstItem="AZ9-ID-kA2" firstAttribute="centerX" secondItem="b74-nG-B4k" secondAttribute="centerX" id="DGu-3B-6iQ"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="b74-nG-B4k" secondAttribute="bottom" id="G6D-OR-VYs"/>
-                            <constraint firstItem="b74-nG-B4k" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Ok0-Ch-TTf"/>
-                            <constraint firstItem="b74-nG-B4k" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="V30-2r-vRi"/>
+                            <constraint firstItem="b74-nG-B4k" firstAttribute="trailing" secondItem="Ze5-6b-2t3" secondAttribute="trailing" id="Ok0-Ch-TTf"/>
+                            <constraint firstItem="b74-nG-B4k" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="V30-2r-vRi"/>
                             <constraint firstItem="b74-nG-B4k" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="ctk-eK-4wH"/>
                         </constraints>
                     </view>
