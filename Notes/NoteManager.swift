@@ -25,16 +25,16 @@ class NoteManager: Codable {
       }
   }
   
-  static var notes: [NoteItem] = []
+ var notes: [NoteItem] = []
 
   ///Translates a given Note ID to the index of the note in the `notes` array
     
-  static private func indexOfNote(id: UUID) -> Int? {
+  private func indexOfNote(id: UUID) -> Int? {
     return notes.firstIndex { $0.note.id == id }
   }
     
     
-    static func updateLocalStorage() {
+    func updateLocalStorage() {
         
         // adding noteItem to local storage
         
@@ -54,7 +54,7 @@ class NoteManager: Codable {
         
     }
     
-    static func loadLocalStorageData() {
+    func loadLocalStorageData() {
         // Load data
         let plistDecoder = PropertyListDecoder()
         guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Notes.plist") else { return }
@@ -75,7 +75,7 @@ class NoteManager: Codable {
     }
     
 
-    static func addNote(_ note: Note, completion: (Bool) -> Void) -> UUID? {
+    func addNote(_ note: Note, completion: (Bool) -> Void) -> UUID? {
         
     guard note.title.isEmpty == false || note.content.isEmpty == false else { return nil }
       
@@ -112,7 +112,7 @@ class NoteManager: Codable {
   }
     
     
-    static func deleteNote(_ row: Int)->Bool{
+    func deleteNote(_ row: Int)->Bool{
         
         // delete note from note array
         notes.remove(at: row)
@@ -236,3 +236,4 @@ class NoteManager: Codable {
 
 }
 
+var noteManager = NoteManager()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol UpdateUI: class {
+protocol UpdateUI: AnyObject {
     func updateTableView()
 }
 
@@ -16,6 +16,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
+    
     
     
     override func viewDidLoad() {
@@ -37,7 +38,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         table.dataSource = self
         
         //load local storage data
-        NoteManager.loadLocalStorageData()
+        noteManager.loadLocalStorageData()
         
     }
     
@@ -65,14 +66,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return NoteManager.notes.count
+        return noteManager.notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteTableViewCell", for: indexPath) as! NoteTableViewCell
 
-        cell.heading?.text = NoteManager.notes[indexPath.row].note.title
-        cell.content?.text = NoteManager.notes[indexPath.row].note.content
+        cell.heading?.text = noteManager.notes[indexPath.row].note.title
+        cell.content?.text = noteManager.notes[indexPath.row].note.content
         
         return cell
     }
@@ -83,7 +84,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         if editingStyle == .delete {
             
             // delete the note from memory
-            let _ = NoteManager.deleteNote(indexPath.row)
+            let _ = noteManager.deleteNote(indexPath.row)
             
             //temp solution
             //NoteManager.notes.remove(at: indexPath.row)

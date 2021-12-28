@@ -14,14 +14,15 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!
     
+//    var noteManager = NoteManager()
+    
     var noteTitle = "Title"
     var noteContent = ""
         
     var delegate: UpdateUI?
     
     var note = Note(title: "", content: "")
-//    var noteManager = NoteManager()
-//
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,7 +65,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
             note.content = noteContent
         }
         
-        let _ = NoteManager.addNote(note) { added in
+        let _ = noteManager.addNote(note) { added in
             if added {
                 print("added")
                 delegate?.updateTableView()
