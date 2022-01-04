@@ -123,7 +123,6 @@
                             <constraint firstItem="luQ-MS-GPG" firstAttribute="bottom" secondItem="isf-rs-gIq" secondAttribute="bottom" id="yBR-Uv-TAh"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="gDJ-Gq-MB5"/>
                     <connections>
                         <outlet property="noteTextView" destination="isf-rs-gIq" id="AiJ-PR-zJ2"/>
                         <outlet property="titleTextField" destination="76j-MJ-WZE" id="3ju-R1-JUi"/>

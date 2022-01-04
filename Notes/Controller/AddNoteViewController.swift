@@ -8,83 +8,89 @@
 import UIKit
 
 class AddNoteViewController: UIViewController, UITextViewDelegate {
-    
-    let placeholder = "Note"
+
 
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!
     
-//    var noteManager = NoteManager()
     
-    var noteTitle = "Title"
+    var noteTitle = ""
     var noteContent = ""
         
     var delegate: UpdateUI?
     
     var note = Note(title: "", content: "")
+    
+    var selectedRow: Int = 9999999
 
+    var editMode = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         noteTextView.delegate = self
-        noteTextView.text = placeholder
-        noteTextView.textColor = .lightGray
         
-
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if noteTextView.textColor == .lightGray {
-            textView.text = ""
-            textView.textColor = .black
+        titleTextField.text = noteTitle
+        noteTextView.text = noteContent
+        
+        if noteTitle != "" || noteContent != "" {
+            // make editing true
+            editMode = true
         }
     }
     
+
     @IBAction func saveButtonPressed(_ sender: Any) {
         
-
-
-        
-        if noteTextView.text == "" {
-            noteTextView.text = placeholder
-            noteTextView.textColor = .lightGray
-        }
-
         noteTitle = titleTextField.text!
+        noteContent = noteTextView.text!
         
-        
-        // prevents from adding placeholder text to textview
-        if noteTextView.textColor == .lightGray {
-            noteContent = ""
-        } else {
-            noteContent = noteTextView.text!
-        }
-        
-        if noteTitle != "" {
-            note.title = noteTitle
-            note.content = noteContent
-        }
-        
-        let _ = noteManager.addNote(note) { added in
-            if added {
-                print("added")
-                delegate?.updateTableView()
+        if editMode {
+            
+            print("editing")
+            
+            _ = noteManager.editNote(row: selectedRow, title: noteTitle, content: noteContent) { edited in
+                if edited {
+                    print("should update table view")
+                    delegate?.updateTableView()
+                } else {
+                    print("editing failed")
+                }
                 
-            } else {
-                print("not added")
             }
+            
+            
+            
+        } else {
+            
+            // if edit mode is false, means we are creating a new note
+            
+            if noteTitle != "" {
+                note.title = noteTitle
+                note.content = noteContent
+            
+            
+            let _ = noteManager.addNote(note) { added in
+                
+                if added {
+                    delegate?.updateTableView()
+                } else {
+                    print("Error! not added")
+                }
+            }
+            
         }
-        
-        
+    }
         
         //  go back to main screen
         
-        
-        dismiss(animated: true, completion: nil)
-        
-    }
+        _ = navigationController?.popViewController(animated: true)
+       
 
 }
 
 
+}
 
+
+// note is editing but not updating the ui

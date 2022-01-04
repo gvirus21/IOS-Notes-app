@@ -17,7 +17,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
     
-    
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,14 +51,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         addNoteVC.modalPresentationStyle = .fullScreen
         
         addNoteVC.delegate = self
-        present(addNoteVC, animated: true)
-                
+        
+        self.navigationController?.pushViewController(addNoteVC, animated: true)
+
+            
                 
     }
     
-//    func reloadTable() {
-//        table.reloadData()
-//    }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
@@ -80,19 +79,36 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     // swipe to delete
+    
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             
             // delete the note from memory
             let _ = noteManager.deleteNote(indexPath.row)
             
-            //temp solution
-            //NoteManager.notes.remove(at: indexPath.row)
-            
-            
             // removing note from ui
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
+    }
+    
+    // select a note from table view
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        
+        let addNoteVC = storyboard.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        
+        let clickedNote = noteManager.notes[indexPath.row].note
+        
+        addNoteVC.delegate = self
+
+        
+        addNoteVC.noteTitle = clickedNote.title
+        addNoteVC.noteContent = clickedNote.content
+        addNoteVC.selectedRow = indexPath.row
+        
+        self.navigationController?.pushViewController(addNoteVC, animated: true)
     }
 }
 
