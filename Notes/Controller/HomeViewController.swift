@@ -16,8 +16,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
-    
-
+    @IBOutlet weak var searchField: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,10 +36,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         table.delegate = self
         table.dataSource = self
         
+        searchField.delegate = self
+        
         //load local storage data
         noteManager.loadLocalStorageData()
         
+        
+        // updates filtered Notes
+        noteManager.filteredNotes = noteManager.notes
+        
     }
+    
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
@@ -65,14 +71,14 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteManager.notes.count
+        return noteManager.filteredNotes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteTableViewCell", for: indexPath) as! NoteTableViewCell
 
-        cell.heading?.text = noteManager.notes[indexPath.row].note.title
-        cell.content?.text = noteManager.notes[indexPath.row].note.content
+        cell.heading?.text = noteManager.filteredNotes[indexPath.row].note.title
+        cell.content?.text = noteManager.filteredNotes[indexPath.row].note.content
         
         return cell
     }
@@ -99,7 +105,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let addNoteVC = storyboard.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
         
-        let clickedNote = noteManager.notes[indexPath.row].note
+        let clickedNote = noteManager.filteredNotes[indexPath.row].note
         
         addNoteVC.delegate = self
 
@@ -119,5 +125,27 @@ extension HomeViewController: UpdateUI {
         DispatchQueue.main.async {
             self.table.reloadData()
         }
+    }
+}
+
+extension HomeViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        noteManager.filteredNotes = []
+        
+        if searchText == "" {
+            noteManager.filteredNotes = noteManager.notes
+        }
+        
+        for noteItem in noteManager.notes {
+            if noteItem.note.title.uppercased().contains(searchText.uppercased()) ||
+                noteItem.note.content.uppercased().contains(searchText.uppercased())
+            {
+                noteManager.filteredNotes.append(noteItem)
+            }
+        }
+        
+        self.table.reloadData()
+        
     }
 }

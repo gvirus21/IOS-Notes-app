@@ -59,8 +59,6 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
                 
             }
             
-            
-            
         } else {
             
             // if edit mode is false, means we are creating a new note

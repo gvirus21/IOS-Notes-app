@@ -26,6 +26,8 @@ class NoteManager: Codable {
   }
   
  var notes: [NoteItem] = []
+    
+    var filteredNotes: [NoteItem] = []
 
   ///Translates a given Note ID to the index of the note in the `notes` array
     
@@ -96,6 +98,9 @@ class NoteManager: Codable {
           //update table view
           completion(true)
           
+          //update filtered notes
+          filteredNotes = notes
+          
           return note.id
       } else {
           
@@ -114,6 +119,9 @@ class NoteManager: Codable {
         
         // delete note from database
         updateLocalStorage()
+        
+        //update filtered notes
+        filteredNotes = notes
         
         return true
       }
@@ -137,7 +145,9 @@ class NoteManager: Codable {
         // Update table ui
         completion(true)
         
-        
+        //update filtered notes
+        filteredNotes = notes
+
         return false
     }
     
