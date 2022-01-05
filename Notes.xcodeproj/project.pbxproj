@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A235AEA6278582DF00784A63 /* NoteItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A235AEA5278582DF00784A63 /* NoteItem.swift */; };
 		A23A10CD276C9EE1009D6177 /* Note.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23A10CC276C9EE1009D6177 /* Note.swift */; };
 		A23A10CF276CA6E6009D6177 /* customTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23A10CE276CA6E6009D6177 /* customTableViewCell.swift */; };
 		A23A10D3276CAC04009D6177 /* NoteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A23A10D2276CAC04009D6177 /* NoteManager.swift */; };
@@ -43,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A235AEA5278582DF00784A63 /* NoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteItem.swift; sourceTree = "<group>"; };
 		A23A10CC276C9EE1009D6177 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		A23A10CE276CA6E6009D6177 /* customTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customTableViewCell.swift; sourceTree = "<group>"; };
 		A23A10D2276CAC04009D6177 /* NoteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteManager.swift; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				A23A10CC276C9EE1009D6177 /* Note.swift */,
+				A235AEA5278582DF00784A63 /* NoteItem.swift */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				A2E8E2BC2769BFF2000CEDAF /* AppDelegate.swift in Sources */,
 				A2E8E2BE2769BFF2000CEDAF /* SceneDelegate.swift in Sources */,
 				A23A10CF276CA6E6009D6177 /* customTableViewCell.swift in Sources */,
+				A235AEA6278582DF00784A63 /* NoteItem.swift in Sources */,
 				A27347ED276B4FC10043E794 /* HomeViewController.swift in Sources */,
 				A298CA3127732F6E007F3713 /* NoteTableViewCell.swift in Sources */,
 				A23A10D3276CAC04009D6177 /* NoteManager.swift in Sources */,

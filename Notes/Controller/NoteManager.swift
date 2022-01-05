@@ -9,26 +9,13 @@ import UIKit
 
 class NoteManager: Codable {
 
-  struct NoteItem: Equatable, Codable {
-    var note: Note
-    var isPinned: Bool
-    var isSecured: Bool
-
-    init(note: Note, isPinned: Bool = false, isSecured: Bool = false){
-      self.note = note
-      self.isPinned = isPinned
-      self.isSecured = isSecured
-    }
-      
-      static func ==(lhs: NoteItem, rhs: NoteItem) -> Bool{
-          return lhs.note == rhs.note
-      }
-  }
   
  var notes: [NoteItem] = []
+ var filteredNotes: [NoteItem] = []
 
-  ///Translates a given Note ID to the index of the note in the `notes` array
     
+  ///Translates a given Note ID to the index of the note in the `notes` array
+
   private func indexOfNote(id: UUID) -> Int? {
     return notes.firstIndex { $0.note.id == id }
   }
@@ -96,6 +83,9 @@ class NoteManager: Codable {
           //update table view
           completion(true)
           
+          //update filtered notes
+          filteredNotes = notes
+          
           return note.id
       } else {
           
@@ -114,6 +104,9 @@ class NoteManager: Codable {
         
         // delete note from database
         updateLocalStorage()
+        
+        //update filtered notes
+        filteredNotes = notes
         
         return true
       }
@@ -137,7 +130,9 @@ class NoteManager: Codable {
         // Update table ui
         completion(true)
         
-        
+        //update filtered notes
+        filteredNotes = notes
+
         return false
     }
     
