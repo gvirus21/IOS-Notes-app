@@ -27,6 +27,18 @@ class NoteManager: Codable {
 
     }
     
+    func sortPinnedNotes() {
+        var index = 0
+        for noteItem in notes {
+            if noteItem.isPinned {
+                let removedNoteItem = notes.remove(at: index)
+                notes.insert(removedNoteItem, at: 0)
+
+            }
+            index += 1
+        }
+    }
+    
     
     func updateLocalStorage() {
         

@@ -43,6 +43,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // sort Notes according to their added Date
         noteManager.sortByDate()
         
+        //sort pinned notes
+        noteManager.sortPinnedNotes()
+        
         // updates filtered Notes
         noteManager.filteredNotes = noteManager.notes
         
@@ -75,6 +78,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteTableViewCell", for: indexPath) as! NoteTableViewCell
+        if noteManager.filteredNotes[indexPath.row].isPinned {
+            cell.pinLabel?.text = "Pinned"
+        } else {
+            cell.pinLabel?.text = ""
+        }
         
         // If note is secured then hide contents
         if noteManager.filteredNotes[indexPath.row].isSecured {
@@ -149,6 +157,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
             //updates local storage
             noteManager.updateLocalStorage()
+            
+            // sort Notes according to their added Date
+            noteManager.sortByDate()
+            
+            //sort pinned notes
+            noteManager.sortPinnedNotes()
+            
+            // updates filtered Notes
+            noteManager.filteredNotes = noteManager.notes
             
             //reloads the table
             self.table.reloadData()
