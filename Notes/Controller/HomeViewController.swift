@@ -26,7 +26,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
-        // table
         
         // registering table cell
         let nib = UINib(nibName: "NoteTableViewCell", bundle: nil)
@@ -41,6 +40,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         //load local storage data
         noteManager.loadLocalStorageData()
         
+        // sort Notes according to their added Date
+        noteManager.sortByDate()
         
         // updates filtered Notes
         noteManager.filteredNotes = noteManager.notes
@@ -60,8 +61,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.navigationController?.pushViewController(addNoteVC, animated: true)
 
-            
-                
     }
     
 
@@ -82,12 +81,20 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.heading?.text = "Secured Note"
             cell.content?.text = "******"
         } else {
-            
-            print("\(noteManager.filteredNotes[indexPath.row].note.title): \(noteManager.filteredNotes[indexPath.row].isSecured)")
+    
             cell.heading?.text = noteManager.filteredNotes[indexPath.row].note.title
             cell.content?.text = noteManager.filteredNotes[indexPath.row].note.content
         }
         
+       // setting date in label
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yyyy"
+
+        let noteCreatedDate = noteManager.filteredNotes[indexPath.row].dateCreated
+        let formattedDate = dateFormatter.string(from: noteCreatedDate)
+        
+        cell.DateLabel?.text = formattedDate
         
         return cell
     }
@@ -110,7 +117,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
         }
         
-        let secureLabel = noteManager.filteredNotes[indexPath.row].isSecured ? "unsecure" : "secure"
+        let secureLabel = noteManager.filteredNotes[indexPath.row].isSecured ? "unsecure" : "Secure"
         
         let toggleSecure = UIContextualAction(style: .normal, title: secureLabel) {
             (toggleSecure, view, completion) in
@@ -130,7 +137,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             
         }
         
-        return UISwipeActionsConfiguration(actions: [ delete, toggleSecure ])
+        let pinLabel = noteManager.filteredNotes[indexPath.row].isPinned ? "Unpin" : "Pin"
+        
+        let pinNote = UIContextualAction(style: .normal, title: pinLabel) {
+            (pinNote, view, completion) in
+            
+            noteManager.filteredNotes[indexPath.row].isPinned = !(noteManager.filteredNotes[indexPath.row].isPinned)
+            
+            //sets the value of notes same as filtered notes
+            noteManager.notes = noteManager.filteredNotes
+            
+            //updates local storage
+            noteManager.updateLocalStorage()
+            
+            //reloads the table
+            self.table.reloadData()
+        
+        }
+        
+        return UISwipeActionsConfiguration(actions: [ toggleSecure, pinNote, delete ])
     }
     
     // select a note from table view
@@ -156,8 +181,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 
 extension HomeViewController: UpdateUI {
     func updateTableView() {
-        print("update the table view")
-
         DispatchQueue.main.async {
             self.table.reloadData()
         }

@@ -16,9 +16,16 @@ class NoteManager: Codable {
     
   ///Translates a given Note ID to the index of the note in the `notes` array
 
-  private func indexOfNote(id: UUID) -> Int? {
+    private func indexOfNote(id: UUID) -> Int? {
     return notes.firstIndex { $0.note.id == id }
   }
+    
+    func sortByDate() {
+        notes.sort {
+            $0 > $1
+        }
+
+    }
     
     
     func updateLocalStorage() {
@@ -48,7 +55,6 @@ class NoteManager: Codable {
           do {
             let decodedData = try Data(contentsOf: path)
             notes = try plistDecoder.decode([NoteItem].self, from: decodedData)
-            print("data restore !")
           } catch {
             print("error decode > \(error)")
           }
@@ -75,7 +81,7 @@ class NoteManager: Codable {
           let noteItem = NoteItem(note: note)
           
           //appends to the notes array
-          notes.append(noteItem)
+          notes.insert(noteItem, at: 0)
           
           //updates local storage
           updateLocalStorage()
@@ -113,16 +119,12 @@ class NoteManager: Codable {
     
     func editNote(row: Int, title: String, content: String, completion: (Bool) -> Void) -> Bool {
         
-        print("editNoteCalled")
         
         // Updating the values
         
         notes[row].note.title = title
         notes[row].note.content = content
         
-        for noteItem in notes {
-            print(noteItem.note.content)
-        }
         
         // Updating the local storage
         updateLocalStorage()

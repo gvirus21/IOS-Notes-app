@@ -10,6 +10,7 @@ import Foundation
 
 struct NoteItem: Equatable, Codable {
   var note: Note
+  var dateCreated = Date()
   var isPinned: Bool
   var isSecured: Bool
 
@@ -19,7 +20,22 @@ struct NoteItem: Equatable, Codable {
     self.isSecured = isSecured
   }
     
+    
+}
+
+extension NoteItem: Comparable {
+    static func < (lhs: NoteItem, rhs: NoteItem) -> Bool {
+        return lhs.dateCreated < rhs.dateCreated
+    }
+    
+    static func > (lhs: NoteItem, rhs: NoteItem) -> Bool {
+        return lhs.dateCreated > rhs.dateCreated
+    }
+
+    
     static func ==(lhs: NoteItem, rhs: NoteItem) -> Bool{
         return lhs.note == rhs.note
     }
+    
+    
 }

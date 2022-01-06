@@ -47,11 +47,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         
         if editMode {
             
-            print("editing")
-            
             _ = noteManager.editNote(row: selectedRow, title: noteTitle, content: noteContent) { edited in
                 if edited {
-                    print("should update table view")
                     delegate?.updateTableView()
                 } else {
                     print("editing failed")
