@@ -16,7 +16,6 @@
 		A27347EF276B50580043E794 /* AddNoteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27347EE276B50580043E794 /* AddNoteViewController.swift */; };
 		A298CA3127732F6E007F3713 /* NoteTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A298CA2F27732F6E007F3713 /* NoteTableViewCell.swift */; };
 		A298CA3227732F6E007F3713 /* NoteTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = A298CA3027732F6E007F3713 /* NoteTableViewCell.xib */; };
-		A2C64996278825E600644C0D /* Notes icons in Resources */ = {isa = PBXBuildFile; fileRef = A2C64995278825E600644C0D /* Notes icons */; };
 		A2E8E2BC2769BFF2000CEDAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E8E2BB2769BFF2000CEDAF /* AppDelegate.swift */; };
 		A2E8E2BE2769BFF2000CEDAF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2E8E2BD2769BFF2000CEDAF /* SceneDelegate.swift */; };
 		A2E8E2C32769BFF2000CEDAF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A2E8E2C12769BFF2000CEDAF /* Main.storyboard */; };
@@ -46,7 +45,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A2128E6E278829F100552077 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Notes/Controller/icon.png; sourceTree = SOURCE_ROOT; };
+		A2128E6E278829F100552077 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = Notes/icon.png; sourceTree = SOURCE_ROOT; };
+		A2128E732788392700552077 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		A2128E742788392700552077 /* icon.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = icon.svg; sourceTree = "<group>"; };
 		A235AEA5278582DF00784A63 /* NoteItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteItem.swift; sourceTree = "<group>"; };
 		A23A10CC276C9EE1009D6177 /* Note.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Note.swift; sourceTree = "<group>"; };
 		A23A10CE276CA6E6009D6177 /* customTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customTableViewCell.swift; sourceTree = "<group>"; };
@@ -55,7 +56,6 @@
 		A27347EE276B50580043E794 /* AddNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
 		A298CA2F27732F6E007F3713 /* NoteTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteTableViewCell.swift; sourceTree = "<group>"; };
 		A298CA3027732F6E007F3713 /* NoteTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteTableViewCell.xib; sourceTree = "<group>"; };
-		A2C64995278825E600644C0D /* Notes icons */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "Notes icons"; path = "../../../../Downloads/Notes icons"; sourceTree = "<group>"; };
 		A2E8E2B82769BFF2000CEDAF /* Notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Notes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2E8E2BB2769BFF2000CEDAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A2E8E2BD2769BFF2000CEDAF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -96,11 +96,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A2128E722788392700552077 /* Notes icons */ = {
+			isa = PBXGroup;
+			children = (
+				A2128E732788392700552077 /* icon.png */,
+				A2128E742788392700552077 /* icon.svg */,
+			);
+			path = "Notes icons";
+			sourceTree = "<group>";
+		};
 		A298CA2D27732A9D007F3713 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A2128E6E278829F100552077 /* icon.png */,
-				A2C64995278825E600644C0D /* Notes icons */,
 				A23A10D2276CAC04009D6177 /* NoteManager.swift */,
 				A27347EE276B50580043E794 /* AddNoteViewController.swift */,
 				A27347EC276B4FC10043E794 /* HomeViewController.swift */,
@@ -121,6 +128,7 @@
 		A298CA33277342C1007F3713 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A2128E722788392700552077 /* Notes icons */,
 				A23A10CC276C9EE1009D6177 /* Note.swift */,
 				A235AEA5278582DF00784A63 /* NoteItem.swift */,
 			);
@@ -150,6 +158,7 @@
 		A2E8E2BA2769BFF2000CEDAF /* Notes */ = {
 			isa = PBXGroup;
 			children = (
+				A2128E6E278829F100552077 /* icon.png */,
 				A298CA33277342C1007F3713 /* Model */,
 				A298CA2E27732AEB007F3713 /* View */,
 				A298CA2D27732A9D007F3713 /* Controller */,
@@ -288,7 +297,6 @@
 				A2E8E2C82769BFF3000CEDAF /* LaunchScreen.storyboard in Resources */,
 				A2128E6F278829F100552077 /* icon.png in Resources */,
 				A2E8E2C52769BFF3000CEDAF /* Assets.xcassets in Resources */,
-				A2C64996278825E600644C0D /* Notes icons in Resources */,
 				A2E8E2C32769BFF2000CEDAF /* Main.storyboard in Resources */,
 				A298CA3227732F6E007F3713 /* NoteTableViewCell.xib in Resources */,
 				A2E8E2EC2769DB2C000CEDAF /* InputViewController.xib in Resources */,

@@ -100,24 +100,10 @@
                                 <fontDescription key="fontDescription" type="system" weight="medium" pointSize="30"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9eD-QG-W29">
-                                <rect key="frame" x="179" y="796" width="70" height="56"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="56" id="1jS-ND-Igs"/>
-                                    <constraint firstAttribute="width" constant="70" id="BKD-YF-giO"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="gray" title="save"/>
-                                <connections>
-                                    <action selector="saveButtonPressed:" destination="byK-92-MqN" eventType="touchUpInside" id="0qD-Dv-3qd"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="luQ-MS-GPG"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="luQ-MS-GPG" firstAttribute="bottom" secondItem="9eD-QG-W29" secondAttribute="bottom" constant="40" id="4qW-VI-TDy"/>
-                            <constraint firstItem="9eD-QG-W29" firstAttribute="centerX" secondItem="LjZ-dh-Joa" secondAttribute="centerX" id="CRb-ak-N6Z"/>
                             <constraint firstItem="76j-MJ-WZE" firstAttribute="leading" secondItem="luQ-MS-GPG" secondAttribute="leading" constant="20" id="Xeb-2l-HlP"/>
                             <constraint firstItem="76j-MJ-WZE" firstAttribute="top" secondItem="luQ-MS-GPG" secondAttribute="top" constant="10" id="Yj0-XP-fwX"/>
                             <constraint firstItem="luQ-MS-GPG" firstAttribute="trailing" secondItem="76j-MJ-WZE" secondAttribute="trailing" constant="20" id="bAr-yh-gSE"/>

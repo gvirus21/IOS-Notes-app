@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddNoteViewController: UIViewController, UITextViewDelegate {
+class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
 
 
     @IBOutlet weak var titleTextField: UITextField!
@@ -28,7 +28,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        noteTextView.delegate = self
+        titleTextField?.delegate = self
+        noteTextView?.delegate = self
         
         titleTextField.text = noteTitle
         noteTextView.text = noteContent
@@ -39,9 +40,8 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         }
     }
     
-
-    @IBAction func saveButtonPressed(_ sender: Any) {
-        
+    
+    func saveNote() {
         noteTitle = titleTextField.text!
         noteContent = noteTextView.text!
         
@@ -79,13 +79,23 @@ class AddNoteViewController: UIViewController, UITextViewDelegate {
         
         //  go back to main screen
         
-        _ = navigationController?.popViewController(animated: true)
-       
-
+//        _ = navigationController?.popViewController(animated: true)
+       // save button ends
 }
-
-
+    
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        print("text view editing ended")
+        
+        saveNote()
+    }
+    
+   
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("text field editing ended")
+        
+        saveNote()
+    }
+    
+    
 }
-
-
-// note is editing but not updating the ui
