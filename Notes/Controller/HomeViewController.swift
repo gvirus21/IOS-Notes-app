@@ -127,10 +127,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let secureLabel = noteManager.filteredNotes[indexPath.row].isSecured ? "unsecure" : "Secure"
         
-        let toggleSecure = UIContextualAction(style: .normal, title: secureLabel) {
+        let toggleSecure = UIContextualAction(style: .normal , title: secureLabel) {
             (toggleSecure, view, completion) in
             
-            toggleSecure.backgroundColor = UIColor.init(red: 0/255.0, green: 255/255.0, blue: 0/255.0, alpha: 0)
+//            toggleSecure.backgroundColor = UIColor.init(red: 0/255.0, green: 255/255.0, blue: 0/255.0, alpha: 0)
+            
             
             noteManager.filteredNotes[indexPath.row].isSecured = !(noteManager.filteredNotes[indexPath.row].isSecured)
             
@@ -171,6 +172,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             self.table.reloadData()
         
         }
+        
+        pinNote.backgroundColor = .systemYellow
+        toggleSecure.backgroundColor = .green
         
         return UISwipeActionsConfiguration(actions: [ toggleSecure, pinNote, delete ])
     }
