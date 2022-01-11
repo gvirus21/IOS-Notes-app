@@ -69,9 +69,19 @@
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dTu-Sv-q0J" secondAttribute="trailing" constant="30" id="yCC-5C-goU"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Notes" id="1CN-Xg-UbK"/>
+                    <navigationItem key="navigationItem" title="Notes" id="1CN-Xg-UbK">
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="S1w-lM-PpT">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="QRq-Qg-cht">
+                                <rect key="frame" x="313" y="5" width="95" height="34.333333333333336"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="gray" title="Button"/>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="dTu-Sv-q0J" id="rze-dg-YGv"/>
+                        <outlet property="menuOptionButton" destination="S1w-lM-PpT" id="MN0-7t-oUd"/>
                         <outlet property="searchField" destination="eMj-Bl-tyo" id="JeK-rQ-IkG"/>
                         <outlet property="table" destination="CXf-Er-uq4" id="qWF-dG-y8t"/>
                     </connections>

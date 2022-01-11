@@ -13,10 +13,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!
     
-    
-    var noteTitle = ""
-    var noteContent = ""
-        
+
     var delegate: UpdateUI?
     
     var note = Note(title: "", content: "")
@@ -25,77 +22,71 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDe
 
     var editMode = false
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         titleTextField?.delegate = self
         noteTextView?.delegate = self
         
-        titleTextField.text = noteTitle
-        noteTextView.text = noteContent
+        titleTextField.text = note.title
+        noteTextView.text = note.content
         
-        if noteTitle != "" || noteContent != "" {
+        if note.title != "" || note.content != "" {
             // make editing true
             editMode = true
         }
     }
     
-    
     func saveNote() {
-        noteTitle = titleTextField.text!
-        noteContent = noteTextView.text!
+        
+        
+            note.title = titleTextField.text!
+            note.content = noteTextView.text!
+
+
+        if let _ = noteManager.addNote(note) {
+
+
+                delegate?.updateTableView()
+           
+        } else {
+            print("not added")
+        }
+      
+    }
+    
+    
+    func editNote() {
+        
+         note.title = titleTextField.text!
+         note.content = noteTextView.text!
+        
+        //use id insted of row/index
+        _ = noteManager.editNote(row: selectedRow, title: note.title, content: note.content) { edited in
+            
+        if edited {
+            delegate?.updateTableView()
+        } else {
+            print("editing failed")
+        }
+
+      }
+   }
+    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        
+        super.viewWillDisappear(animated)
+        print("back button pressed ")
         
         if editMode {
-            
-            _ = noteManager.editNote(row: selectedRow, title: noteTitle, content: noteContent) { edited in
-                if edited {
-                    delegate?.updateTableView()
-                } else {
-                    print("editing failed")
-                }
-                
-            }
-            
+            editNote()
         } else {
-            
-            // if edit mode is false, means we are creating a new note
-            
-            if noteTitle != "" {
-                note.title = noteTitle
-                note.content = noteContent
-            
-            
-            let _ = noteManager.addNote(note) { added in
-                
-                if added {
-                    delegate?.updateTableView()
-                } else {
-                    print("Error! not added")
-                }
-            }
-            
+            saveNote()
         }
+
     }
-        
-        //  go back to main screen
-        
-//        _ = navigationController?.popViewController(animated: true)
-       // save button ends
-}
-    
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        print("text view editing ended")
-        
-        saveNote()
-    }
-    
-   
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        print("text field editing ended")
-        
-        saveNote()
-    }
-    
     
 }

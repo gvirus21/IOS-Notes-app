@@ -17,14 +17,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var searchField: UISearchBar!
+    @IBOutlet weak var menuOptionButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //Rounds the corners of add button
-        
-        addButton.layer.cornerRadius = addButton.frame.width / 2
-        addButton.layer.masksToBounds = true
+        // configure buttons
+        configureButtons()
         
         
         // registering table cell
@@ -51,6 +50,28 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
     }
     
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("view appeared")
+        
+        noteManager.sortPinnedNotes()
+        self.table.reloadData()
+    }
+    
+    func configureButtons() {
+        
+        //Rounds the corners of add button
+        
+        addButton.layer.cornerRadius = addButton.frame.width / 2
+        addButton.layer.masksToBounds = true
+        
+        //Configure menu button
+        
+        menuOptionButton.customView?.backgroundColor = .systemYellow
+        menuOptionButton.name
+        
+    }
     
     @IBAction func addButtonPressed(_ sender: Any) {
         
@@ -129,9 +150,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         let toggleSecure = UIContextualAction(style: .normal , title: secureLabel) {
             (toggleSecure, view, completion) in
-            
-//            toggleSecure.backgroundColor = UIColor.init(red: 0/255.0, green: 255/255.0, blue: 0/255.0, alpha: 0)
-            
+
             
             noteManager.filteredNotes[indexPath.row].isSecured = !(noteManager.filteredNotes[indexPath.row].isSecured)
             
@@ -192,8 +211,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         addNoteVC.delegate = self
 
         
-        addNoteVC.noteTitle = clickedNote.title
-        addNoteVC.noteContent = clickedNote.content
+        addNoteVC.note = clickedNote
         addNoteVC.selectedRow = indexPath.row
         
         self.navigationController?.pushViewController(addNoteVC, animated: true)
@@ -204,6 +222,9 @@ extension HomeViewController: UpdateUI {
     func updateTableView() {
         DispatchQueue.main.async {
             self.table.reloadData()
+            
+            // search why to update ui in async block
+            // learn about dispatchQueue.main.async
         }
     }
 }
@@ -228,4 +249,5 @@ extension HomeViewController: UISearchBarDelegate {
         self.table.reloadData()
         
     }
+    
 }

@@ -74,44 +74,32 @@ class NoteManager: Codable {
     }
     
 
-    func addNote(_ note: Note, completion: (Bool) -> Void) -> UUID? {
+    func addNote(_ note: Note ) -> UUID? {
         
     guard note.title.isEmpty == false || note.content.isEmpty == false else { return nil }
       
-      var doesAlreadyExist = false
-      
-      
-      notes.forEach { n in
-          if n.note.id == note.id {
-              doesAlreadyExist = true
-          }
-
-      }
-      
-      if !doesAlreadyExist {
-          //create noteItem
           let noteItem = NoteItem(note: note)
           
+          var topIndex = 0
+        
+        for noteItem in notes {
+            if noteItem.isPinned {
+                topIndex += 1
+            }
+        }
+        
           //appends to the notes array
-          notes.insert(noteItem, at: 0)
+          notes.insert(noteItem, at: topIndex)
           
           //updates local storage
           updateLocalStorage()
           
-          //update table view
-          completion(true)
           
           //update filtered notes
           filteredNotes = notes
           
           return note.id
-      } else {
           
-          completion(false)
-      }
-            
-   return nil
-      
   }
     
     
@@ -154,3 +142,8 @@ class NoteManager: Codable {
 }
 
 var noteManager = NoteManager()
+
+
+// note pin issue - fixed
+// hide secure notes
+//
