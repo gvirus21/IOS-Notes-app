@@ -17,7 +17,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var searchField: UISearchBar!
-    @IBOutlet weak var menuOptionButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,10 +65,15 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
-        //Configure menu button
+        let menu = UIMenu(title: "", children: [
+            UIAction(title: "show archaived", handler: { (_) in }),
+            UIAction(title: "show secured", handler: { (_) in }),
+        ])
         
-        menuOptionButton.customView?.backgroundColor = .systemYellow
-        menuOptionButton.name
+        //Configure menu button
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "list.number"), menu: menu)
+        
+        
         
     }
     
