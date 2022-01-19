@@ -7,16 +7,32 @@
 
 import UIKit
 
-protocol UpdateUI: AnyObject {
-    func updateTableView()
-}
-
-
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var searchField: UISearchBar!
+    
+    var shouldShowSecureNotes = false
+    
+    var betterNoteManager: BetterNoteManager = {
+        let date = Date(timeIntervalSince1970: 0)
+        let notes: [BetterNote] = (1...5).reversed().compactMap { (idx) in
+            BetterNote(title: "Automatic \(idx)",
+                       content: ["Hello", "Hola", "Yo", "Sup", "Hey", "Hi", "Kaisa hai bey"].randomElement()!,
+                       dateCreated: date.addingTimeInterval(TimeInterval(idx) * 10))
+        }
+
+        return BetterNoteManager(notes: notes)
+    }()
+    
+    var notes: [BetterNote] {
+        if shouldShowSecureNotes {
+            return betterNoteManager.getSecuredNotes(searchTerm: searchField.text)
+        } else {
+            return betterNoteManager.getAllNotes(searchTerm: searchField.text)
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,37 +40,18 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         // configure buttons
         configureButtons()
         
-        
         // registering table cell
         let nib = UINib(nibName: "NoteTableViewCell", bundle: nil)
         table.register(nib, forCellReuseIdentifier: "NoteTableViewCell")
-        
-        
+
         table.delegate = self
         table.dataSource = self
-        
         searchField.delegate = self
-        
-        //load local storage data
-        noteManager.loadLocalStorageData()
-        
-        // sort Notes according to their added Date
-        noteManager.sortByDate()
-        
-        //sort pinned notes
-        noteManager.sortPinnedNotes()
-        
-        // updates filtered Notes
-        noteManager.filteredNotes = noteManager.notes
         
     }
     
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("view appeared")
-        
-        noteManager.sortPinnedNotes()
         self.table.reloadData()
     }
     
@@ -65,193 +62,130 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
-        let menu = UIMenu(title: "", children: [
-            UIAction(title: "show archaived", handler: { (_) in }),
-            UIAction(title: "show secured", handler: { (_) in }),
-        ])
         
         //Configure menu button
+        
+        let secureOptionTitle = shouldShowSecureNotes ? "Hide Secure notes" : "Show secure notes"
+        
+        let menu = UIMenu(title: "", children: [
+            UIAction(title: "Archive", handler: { (_) in self.navigateToArchive()}),  // navigate to diffrent page to show archive notes
+            UIAction(title: secureOptionTitle, handler: { (_) in self.toggleSecureNoteView()}),    // should hide/show secure notes
+            UIAction(title: "delete all notes", handler: { (_) in self.deleteAllNotes()}), // makes notes empty
+        ])
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "list.number"), menu: menu)
-        
-        
-        
     }
+    
+    
+    // Navigates to Archive notes view
+    func navigateToArchive() {
+        let sb = UIStoryboard(name: "Main", bundle:nil)
+        let vc = sb.instantiateViewController(withIdentifier: "archiveVC") as! ArchiveViewController
+        vc.betterNoteManager = betterNoteManager
+        
+        show(vc, sender: nil)
+    }
+    
+    // toggles securenoteview
+    func toggleSecureNoteView() {
+        shouldShowSecureNotes = !shouldShowSecureNotes
+        table.reloadData()
+    }
+    
+    func deleteAllNotes() {
+        betterNoteManager.clear()
+        table.reloadData()
+    }
+    
     
     @IBAction func addButtonPressed(_ sender: Any) {
+        let sb : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        vc.betterNoteManager = betterNoteManager
         
-        let addNoteVC = storyboard.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
-        
-        addNoteVC.modalPresentationStyle = .fullScreen
-        
-        addNoteVC.delegate = self
-        
-        self.navigationController?.pushViewController(addNoteVC, animated: true)
-
+        vc.modalPresentationStyle = .fullScreen
+        self.show(vc, sender: nil)
     }
     
-
+    //table view functions
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return noteManager.filteredNotes.count
+        return notes.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let note = notes[indexPath.row]
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "NoteTableViewCell", for: indexPath) as! NoteTableViewCell
-        if noteManager.filteredNotes[indexPath.row].isPinned {
-            cell.pinLabel?.text = "Pinned"
-        } else {
-            cell.pinLabel?.text = ""
-        }
-        
-        // If note is secured then hide contents
-        if noteManager.filteredNotes[indexPath.row].isSecured {
-            cell.heading?.text = "Secured Note"
-            cell.content?.text = "******"
-        } else {
-    
-            cell.heading?.text = noteManager.filteredNotes[indexPath.row].note.title
-            cell.content?.text = noteManager.filteredNotes[indexPath.row].note.content
-        }
-        
-       // setting date in label
+        cell.pinLabel.text = note.isPinned ? "Pinned" : ""
+        cell.heading.text = note.title
+        cell.content.text = note.isSecured ? "***" : note.content
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd/MM/yyyy"
-
-        let noteCreatedDate = noteManager.filteredNotes[indexPath.row].dateCreated
-        let formattedDate = dateFormatter.string(from: noteCreatedDate)
+        let formattedDate = dateFormatter.string(from: note.dateCreated)
         
         cell.DateLabel?.text = formattedDate
         
         return cell
     }
     
-    
-    // swipe to delete and secure/unsecure note
-        
-    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let note = notes[indexPath.row]
         
-        let delete = UIContextualAction(style: .destructive, title: "delete") {
-            (delete,view,completion ) in
-            
-            // delete the note from memory
-            let _ = noteManager.deleteNote(indexPath.row)
-            
-            // removing note from ui
-              
+        let delete = UIContextualAction(style: .destructive, title: "delete") { (_, _, _ ) in
+            self.betterNoteManager.deleteNote(id: note.id)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            
         }
         
-        let secureLabel = noteManager.filteredNotes[indexPath.row].isSecured ? "unsecure" : "Secure"
+        let secureLabel = note.isSecured ? "Unsecure" : "Secure"
+        let privacy = UIContextualAction(style: .normal , title: secureLabel) { (_, _, _ ) in
+            self.betterNoteManager.secureNote(id: note.id, secure: !note.isSecured)
+            self.table.reloadData()
+        }
         
-        let toggleSecure = UIContextualAction(style: .normal , title: secureLabel) {
-            (toggleSecure, view, completion) in
+        let archive = UIContextualAction(style: .normal, title: "Archive") { (_, _, _) in
+            self.betterNoteManager.archiveNote(!note.isArchived, id: note.id)
+            self.table.reloadData()
+        }
 
-            
-            noteManager.filteredNotes[indexPath.row].isSecured = !(noteManager.filteredNotes[indexPath.row].isSecured)
-            
-            //sets the value of notes same as filtered notes
-            noteManager.notes = noteManager.filteredNotes
-            
-            //updates local storage
-            noteManager.updateLocalStorage()
-            
-            //reloads the table
+        let pinLabel = note.isPinned ? "Unpin" : "Pin"
+        let pin = UIContextualAction(style: .normal, title: pinLabel) { (_, _, _) in
+            self.betterNoteManager.pinNote(id: note.id, pin: !note.isPinned)
             self.table.reloadData()
-            
         }
         
-        let pinLabel = noteManager.filteredNotes[indexPath.row].isPinned ? "Unpin" : "Pin"
+        pin.backgroundColor = .systemYellow
+        privacy.backgroundColor = .green
+        archive.backgroundColor = .blue
         
-        let pinNote = UIContextualAction(style: .normal, title: pinLabel) {
-            (pinNote, view, completion) in
-            
-            noteManager.filteredNotes[indexPath.row].isPinned = !(noteManager.filteredNotes[indexPath.row].isPinned)
-            
-            //sets the value of notes same as filtered notes
-            noteManager.notes = noteManager.filteredNotes
-            
-            //updates local storage
-            noteManager.updateLocalStorage()
-            
-            // sort Notes according to their added Date
-            noteManager.sortByDate()
-            
-            //sort pinned notes
-            noteManager.sortPinnedNotes()
-            
-            // updates filtered Notes
-            noteManager.filteredNotes = noteManager.notes
-            
-            //reloads the table
-            self.table.reloadData()
-        
-        }
-        
-        pinNote.backgroundColor = .systemYellow
-        toggleSecure.backgroundColor = .green
-        
-        return UISwipeActionsConfiguration(actions: [ toggleSecure, pinNote, delete ])
+        return UISwipeActionsConfiguration(actions: [delete, archive, privacy, pin])
     }
     
     // select a note from table view
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let sb = UIStoryboard(name: "Main", bundle:nil)
         
-        let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        vc.betterNoteManager = betterNoteManager
+        vc.noteID = notes[indexPath.row].id
         
-        let addNoteVC = storyboard.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
-        
-        let clickedNote = noteManager.filteredNotes[indexPath.row].note
-        
-        addNoteVC.delegate = self
-
-        
-        addNoteVC.note = clickedNote
-        addNoteVC.selectedRow = indexPath.row
-        
-        self.navigationController?.pushViewController(addNoteVC, animated: true)
+        self.show(vc, sender: nil)
     }
 }
 
-extension HomeViewController: UpdateUI {
-    func updateTableView() {
-        DispatchQueue.main.async {
-            self.table.reloadData()
-            
-            // search why to update ui in async block
-            // learn about dispatchQueue.main.async
-        }
-    }
-}
 
 extension HomeViewController: UISearchBarDelegate {
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        noteManager.filteredNotes = []
-        
-        if searchText == "" {
-            noteManager.filteredNotes = noteManager.notes
-        }
-        
-        for noteItem in noteManager.notes {
-            if noteItem.note.title.uppercased().contains(searchText.uppercased()) ||
-                noteItem.note.content.uppercased().contains(searchText.uppercased())
-            {
-                noteManager.filteredNotes.append(noteItem)
-            }
-        }
-        
-        self.table.reloadData()
-        
+
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        table.reloadData()
     }
-    
+
 }

@@ -78,7 +78,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1695" y="-688"/>
+            <point key="canvasLocation" x="1730" y="-479"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="yGU-aV-Xve">
@@ -121,7 +121,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="N4R-MF-Mye" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2548.5981308411215" y="-688.12095032397417"/>
+            <point key="canvasLocation" x="2563" y="-835"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="8cQ-ES-xy7">
@@ -139,7 +139,38 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kJX-jb-rrq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="863.55140186915878" y="-688.12095032397417"/>
+            <point key="canvasLocation" x="872" y="-479"/>
+        </scene>
+        <!--Archive-->
+        <scene sceneID="StC-JW-heA">
+            <objects>
+                <viewController storyboardIdentifier="archiveVC" id="fHI-t5-3zM" customClass="ArchiveViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xv3-Lm-ozH">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="pTN-sP-1Ii">
+                                <rect key="frame" x="0.0" y="54" width="428" height="838"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="W3g-ba-c3b"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="pTN-sP-1Ii" firstAttribute="leading" secondItem="W3g-ba-c3b" secondAttribute="leading" id="D4g-Sv-JBs"/>
+                            <constraint firstItem="W3g-ba-c3b" firstAttribute="bottom" secondItem="pTN-sP-1Ii" secondAttribute="bottom" id="bWe-Cn-jdE"/>
+                            <constraint firstItem="W3g-ba-c3b" firstAttribute="trailing" secondItem="pTN-sP-1Ii" secondAttribute="trailing" id="pza-0B-zle"/>
+                            <constraint firstItem="pTN-sP-1Ii" firstAttribute="top" secondItem="W3g-ba-c3b" secondAttribute="top" constant="10" id="sZt-ra-Tvc"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="Archive" largeTitleDisplayMode="always" id="BxK-fG-Ev0"/>
+                    <connections>
+                        <outlet property="archiveTable" destination="pTN-sP-1Ii" id="J2V-wc-eK0"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="JaX-eM-IJJ" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2562.6168224299063" y="-128.29373650107993"/>
         </scene>
     </scenes>
     <resources>

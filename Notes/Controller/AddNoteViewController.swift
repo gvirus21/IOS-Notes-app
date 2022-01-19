@@ -8,21 +8,12 @@
 import UIKit
 
 class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
-
-
+    
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!
     
-
-    var delegate: UpdateUI?
-    
-    var note = Note(title: "", content: "")
-    
-    var selectedRow: Int = 9999999
-
-    var editMode = false
-    
-    
+    var betterNoteManager: BetterNoteManager!
+    var noteID: UUID? = nil
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,63 +21,29 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDe
         titleTextField?.delegate = self
         noteTextView?.delegate = self
         
-        titleTextField.text = note.title
-        noteTextView.text = note.content
-        
-        if note.title != "" || note.content != "" {
-            // make editing true
-            editMode = true
-        }
+        let note = betterNoteManager.getAllNotes().first { $0.id == noteID }
+        titleTextField.text = note?.title
+        noteTextView.text = note?.content
     }
     
     func saveNote() {
+        let title = titleTextField.text
+        let content = noteTextView.text
         
-        
-            note.title = titleTextField.text!
-            note.content = noteTextView.text!
-
-
-        if let _ = noteManager.addNote(note) {
-
-
-                delegate?.updateTableView()
-           
+        if let noteID = noteID {
+            betterNoteManager.editNote(id: noteID,
+                                       title: title,
+                                       content: content)
         } else {
-            print("not added")
+            betterNoteManager.addNote( title: title,
+                                       content: content)
         }
-      
     }
-    
-    
-    func editNote() {
-        
-         note.title = titleTextField.text!
-         note.content = noteTextView.text!
-        
-        //use id insted of row/index
-        _ = noteManager.editNote(row: selectedRow, title: note.title, content: note.content) { edited in
-            
-        if edited {
-            delegate?.updateTableView()
-        } else {
-            print("editing failed")
-        }
-
-      }
-   }
     
 
     override func viewWillDisappear(_ animated: Bool) {
-        
         super.viewWillDisappear(animated)
-        print("back button pressed ")
-        
-        if editMode {
-            editNote()
-        } else {
-            saveNote()
-        }
-
+        saveNote()
     }
     
 }

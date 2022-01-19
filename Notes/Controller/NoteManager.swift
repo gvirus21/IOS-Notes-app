@@ -11,7 +11,8 @@ class NoteManager: Codable {
 
   
  var notes: [NoteItem] = []
- var filteredNotes: [NoteItem] = []
+    
+//    var shouldShowSecuredNotes: Bool = false
 
     
   ///Translates a given Note ID to the index of the note in the `notes` array
@@ -35,6 +36,7 @@ class NoteManager: Codable {
                 notes.insert(removedNoteItem, at: 0)
 
             }
+            
             index += 1
         }
     }
@@ -43,6 +45,23 @@ class NoteManager: Codable {
     func updateLocalStorage() {
         
         // adding noteItem to local storage
+        
+        let plistEncoder = PropertyListEncoder()
+        
+        guard let path = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Notes.plist") else { return }
+        
+        do {
+            let data = try plistEncoder.encode([notes])
+             try data.write(to: path)
+          } catch {
+            print("error encode > \(error)")
+          }
+        
+    }
+    
+    func makeNotesNil() {
+        
+        notes = []
         
         let plistEncoder = PropertyListEncoder()
         
@@ -93,29 +112,34 @@ class NoteManager: Codable {
           
           //updates local storage
           updateLocalStorage()
-          
-          
-          //update filtered notes
-          filteredNotes = notes
+        
           
           return note.id
           
   }
     
     
-    func deleteNote(_ row: Int)->Bool{
+    func deleteNote(_ id: UUID)->Bool{
         
-        // delete note from note array
-        notes.remove(at: row)
         
-        // delete note from database
-        updateLocalStorage()
-        
-        //update filtered notes
-        filteredNotes = notes
-        
-        return true
-      }
+        for noteItem in notes {
+            
+            if noteItem.note.id == id {
+                let noteToDelete = noteItem
+                let indexOfNote = notes.firstIndex(of: noteToDelete)!
+                
+                // delete note from note array
+                notes.remove(at: indexOfNote)
+                
+                // delete note from database
+                updateLocalStorage()
+                
+                return true
+
+            }
+        }
+    return false
+  }
     
     func editNote(row: Int, title: String, content: String, completion: (Bool) -> Void) -> Bool {
         
@@ -131,9 +155,6 @@ class NoteManager: Codable {
         
         // Update table ui
         completion(true)
-        
-        //update filtered notes
-        filteredNotes = notes
 
         return false
     }
@@ -142,8 +163,3 @@ class NoteManager: Codable {
 }
 
 var noteManager = NoteManager()
-
-
-// note pin issue - fixed
-// hide secure notes
-//
