@@ -9,9 +9,9 @@ import UIKit
 
 //Reminder: ensure each commit addressed one issue or feature
 //
-//on tapping on empty space of the tableView, go to new note screen
-//find crashes & fix
-//explore trailing action on left; [pin, secure] [archive, delete]
+//on tapping on empty space of the tableView, go to new note screen - tick
+//find crashes & fix - tick
+//explore trailing action on left; [pin, secure] [archive, delete] - tick
 //change the toggle secure menu action label
 //- show archived / show normal
 //- show secured / hide secured
@@ -49,14 +49,29 @@ class HomeViewController: UIViewController {
         setupMenuActions()
         setupTableView()
         restoreNotes()
-        
+        detectTapInEmptyArea()
         searchField.delegate = self
+    }
+    
+    func detectTapInEmptyArea() {
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(gestureFired(_:)))
+        tapRecognizer.numberOfTapsRequired = 1
+        tapRecognizer.numberOfTouchesRequired = 1
+        
+        tableView.backgroundView = UIView()
+        tableView.backgroundView?.addGestureRecognizer(tapRecognizer)
+    }
+    
+    @objc func gestureFired(_ gesture: UITapGestureRecognizer){
+        goToCreateNoteScreen()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView.reloadData()
     }
+    
+    
     
     func setupTableView() {
         let nib = UINib(nibName: "NoteTableViewCell", bundle: nil)
@@ -175,26 +190,6 @@ extension HomeViewController: UITableViewDelegate {
         return 100
     }
     
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let note = notes[indexPath.row]
-        
-        let delete = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _ ) in
-            self.betterNoteManager.deleteNote(id: note.id)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        }
-        
-        
-
-        let pinLabel = note.isPinned ? "Unpin" : "Pin"
-        let pin = UIContextualAction(style: .normal, title: pinLabel) { (_, _, _) in
-            self.betterNoteManager.pinNote(id: note.id, pin: !note.isPinned)
-            self.tableView.reloadData()
-        }
-        
-        pin.backgroundColor = .systemYellow
-        return UISwipeActionsConfiguration(actions: [delete, pin])
-    }
-    
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
         {
         let note = notes[indexPath.row]
@@ -206,6 +201,27 @@ extension HomeViewController: UITableViewDelegate {
             self.tableView.reloadData()
         }
         
+        let pinLabel = note.isPinned ? "Unpin" : "Pin"
+            
+        let pin = UIContextualAction(style: .normal, title: pinLabel) { (_, _, _) in
+            self.betterNoteManager.pinNote(id: note.id, pin: !note.isPinned)
+            self.tableView.reloadData()
+        }
+            
+        pin.backgroundColor = .systemYellow
+        privacy.backgroundColor = .green
+        
+        return UISwipeActionsConfiguration(actions: [pin, privacy])
+    }
+    
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let note = notes[indexPath.row]
+        
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _ ) in
+            self.betterNoteManager.deleteNote(id: note.id)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+        
         let archiveLabel = note.isArchived ? "Unarchive" : "Archive"
             
         let archive = UIContextualAction(style: .normal, title: archiveLabel) { (_, _, _) in
@@ -213,13 +229,10 @@ extension HomeViewController: UITableViewDelegate {
             self.tableView.reloadData()
         }
         
-        privacy.backgroundColor = .green
         archive.backgroundColor = .blue
         
-        return UISwipeActionsConfiguration(actions: [archive, privacy])
+        return UISwipeActionsConfiguration(actions: [delete, archive])
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let sb = UIStoryboard(name: "Main", bundle:nil)
