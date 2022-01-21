@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BetterNote {
+struct BetterNote: Codable {
     let id: UUID
     var title: String?
     var content: String?
@@ -58,8 +58,28 @@ class BetterNoteManager {
     private var pinnedNotes: [BetterNote] = []
     private var archivedNotes: [BetterNote] = []
     
-    init(notes: [BetterNote]) {
-        self.normalNotes = notes
+    init(notes: [BetterNote] = []) {
+        for note in notes {
+            if note.isArchived {
+                archivedNotes.append(note)
+            } else if note.isPinned {
+                pinnedNotes.append(note)
+            } else {
+                normalNotes.append(note)
+            }
+        }
+    }
+    
+    func addNotes(_ notes: [BetterNote]) {
+        for note in notes {
+            if note.isArchived, !archivedNotes.contains(where: { $0.id == note.id }) {
+                archivedNotes.append(note)
+            } else if note.isPinned, !pinnedNotes.contains(where: { $0.id == note.id }) {
+                pinnedNotes.append(note)
+            } else if !normalNotes.contains(where: { $0.id == note.id }) {
+                normalNotes.append(note)
+            }
+        }
     }
     
     func getAllNotes(searchTerm: String? = nil) -> [BetterNote] {
@@ -79,6 +99,10 @@ class BetterNoteManager {
         } else {
             return notes
         }
+    }
+    
+    func getNormalNotes() -> [BetterNote] {
+        return normalNotes
     }
     
     func getArchivedNotes() -> [BetterNote] {
@@ -127,9 +151,11 @@ class BetterNoteManager {
     
     @discardableResult
     func editNote(id: UUID, title: String?, content: String?) -> Bool {
-        if let foundIndex = normalNotes.firstIndex(where: { $0.id == id }) {
-            normalNotes[foundIndex].title = title
-            normalNotes[foundIndex].content = content
+        func editNote(inArray: inout [BetterNote]) -> Bool {
+            guard let foundIndex = inArray.firstIndex(where: { $0.id == id }) else { return false }
+            
+            inArray[foundIndex].title = title
+            inArray[foundIndex].content = content
             
             if title?.isEmpty ?? true, content?.isEmpty ?? true {
                 deleteNote(id: id)
@@ -137,29 +163,9 @@ class BetterNoteManager {
             } else {
                 return true
             }
-        } else if let foundIndex = pinnedNotes.firstIndex(where: { $0.id == id }) {
-            pinnedNotes[foundIndex].title = title
-            pinnedNotes[foundIndex].content = content
-            
-            if title?.isEmpty ?? true, content?.isEmpty ?? true {
-                deleteNote(id: id)
-                return false
-            } else {
-                return true
-            }
-        } else if let foundIndex = archivedNotes.firstIndex(where: { $0.id == id }) {
-            archivedNotes[foundIndex].title = title
-            archivedNotes[foundIndex].content = content
-            
-            if title?.isEmpty ?? true, content?.isEmpty ?? true {
-                deleteNote(id: id)
-                return false
-            } else {
-                return true
-            }
-        } else {
-            return false
         }
+        
+        return editNote(inArray: &normalNotes) || editNote(inArray: &pinnedNotes) || editNote(inArray: &archivedNotes)
     }
     
     @discardableResult
@@ -175,8 +181,8 @@ class BetterNoteManager {
             guard let foundIndex = pinnedNotes.firstIndex(where: { $0.id == id }) else { return false }
             var note = pinnedNotes.remove(at: foundIndex)
             note.isPinned = pin
-            normalNotes.append(note)
-            normalNotes.sort { $0.dateCreated > $1.dateCreated }
+            
+            insertNormalNote(note)
         }
         
         return true
@@ -184,50 +190,45 @@ class BetterNoteManager {
     
     @discardableResult
     func secureNote(id: UUID, secure: Bool) -> Bool {
-        if let foundIndex = normalNotes.firstIndex(where: { $0.id == id }) {
-            normalNotes[foundIndex].isSecured = secure
+        func secureNote(inArray: inout [BetterNote]) -> Bool {
+            guard let foundIndex = inArray.firstIndex(where: { $0.id == id }) else { return false }
+            inArray[foundIndex].isSecured = secure
             return true
-        } else if let foundIndex = pinnedNotes.firstIndex(where: { $0.id == id }) {
-            pinnedNotes[foundIndex].isSecured = secure
+        }
+        
+        return secureNote(inArray: &normalNotes) || secureNote(inArray: &pinnedNotes) || secureNote(inArray: &archivedNotes)
+    }
+    
+    @discardableResult
+    func archiveNote(_ archive: Bool, id: UUID) -> Bool {
+        func archiveNote(fromArray: inout [BetterNote]) -> Bool {
+            guard let foundIndex = fromArray.firstIndex(where: { $0.id == id }) else { return false }
+            var note = fromArray.remove(at: foundIndex)
+            note.isArchived = archive
+            archivedNotes.append(note)
             return true
+        }
+        
+        if archive {
+            return archiveNote(fromArray: &normalNotes) || archiveNote(fromArray: &pinnedNotes)
         } else if let foundIndex = archivedNotes.firstIndex(where: { $0.id == id }) {
-            archivedNotes[foundIndex].isSecured = secure
+            var note = archivedNotes.remove(at: foundIndex)
+            note.isArchived = archive
+            
+            if note.isPinned {
+                pinnedNotes.append(note)
+            } else {
+                insertNormalNote(note)
+            }
             return true
         } else {
             return false
         }
     }
     
-    @discardableResult
-    func archiveNote(_ archive: Bool, id: UUID) -> Bool {
-        if archive {
-            if let foundIndex = normalNotes.firstIndex(where: { $0.id == id }) {
-                var note = normalNotes.remove(at: foundIndex)
-                note.isArchived = archive
-                archivedNotes.append(note)
-                return true
-            } else if let foundIndex = pinnedNotes.firstIndex(where: { $0.id == id }) {
-                var note = pinnedNotes.remove(at: foundIndex)
-                note.isArchived = archive
-                archivedNotes.append(note)
-                return true
-            } else {
-                return false
-            }
-        } else if let foundIndex = archivedNotes.firstIndex(where: { $0.id == id }) {
-            var note = archivedNotes.remove(at: foundIndex)
-            note.isArchived = archive
-            if note.isPinned {
-                pinnedNotes.append(note)
-                pinnedNotes.sort { $0.dateCreated > $1.dateCreated }
-            } else {
-                normalNotes.append(note)
-                normalNotes.sort { $0.dateCreated > $1.dateCreated }
-            }
-            return true
-        } else {
-            return false
-        }
+    private func insertNormalNote(_ note: BetterNote) {
+        let insertAtIndex = normalNotes.firstIndex(where: { $0.dateCreated < note.dateCreated }) ?? normalNotes.count
+        normalNotes.insert(note, at: insertAtIndex)
     }
     
 }

@@ -73,7 +73,7 @@
                     <connections>
                         <outlet property="addButton" destination="dTu-Sv-q0J" id="rze-dg-YGv"/>
                         <outlet property="searchField" destination="eMj-Bl-tyo" id="JeK-rQ-IkG"/>
-                        <outlet property="table" destination="CXf-Er-uq4" id="qWF-dG-y8t"/>
+                        <outlet property="tableView" destination="CXf-Er-uq4" id="qWF-dG-y8t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

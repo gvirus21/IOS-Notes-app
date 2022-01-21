@@ -7,88 +7,109 @@
 
 import UIKit
 
-class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class HomeViewController: UIViewController {
 
     @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchField: UISearchBar!
     
-    var shouldShowSecureNotes = false
+    var toggleSecuredNotes = true
+    var toggleArchivedNotes = false
     
-    var betterNoteManager: BetterNoteManager = {
-        let date = Date(timeIntervalSince1970: 0)
-        let notes: [BetterNote] = (1...5).reversed().compactMap { (idx) in
-            BetterNote(title: "Automatic \(idx)",
-                       content: ["Hello", "Hola", "Yo", "Sup", "Hey", "Hi", "Kaisa hai bey"].randomElement()!,
-                       dateCreated: date.addingTimeInterval(TimeInterval(idx) * 10))
-        }
-
-        return BetterNoteManager(notes: notes)
-    }()
+    var betterNoteManager = BetterNoteManager()
     
     var notes: [BetterNote] {
-        if shouldShowSecureNotes {
-            return betterNoteManager.getSecuredNotes(searchTerm: searchField.text)
+        let notes = betterNoteManager.getAllNotes(searchTerm: searchField.text)
+        
+        if toggleArchivedNotes {
+            return betterNoteManager.getArchivedNotes()
         } else {
-            return betterNoteManager.getAllNotes(searchTerm: searchField.text)
+            if toggleSecuredNotes {
+                return notes
+            } else {
+                return notes.filter { $0.isSecured == false }
+            }
         }
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupMenuActions()
+        setupTableView()
         
-        // configure buttons
-        configureButtons()
-        
-        // registering table cell
-        let nib = UINib(nibName: "NoteTableViewCell", bundle: nil)
-        table.register(nib, forCellReuseIdentifier: "NoteTableViewCell")
-
-        table.delegate = self
-        table.dataSource = self
         searchField.delegate = self
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.table.reloadData()
+        self.tableView.reloadData()
     }
     
-    func configureButtons() {
+    func setupTableView() {
+        let nib = UINib(nibName: "NoteTableViewCell", bundle: nil)
+        tableView.register(nib, forCellReuseIdentifier: "NoteTableViewCell")
         
-        //Rounds the corners of add button
-        
+        tableView.delegate = self
+        tableView.dataSource = self
+    }
+    
+    func setupMenuActions() {
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
+        let toggleArchived = UIAction(title: "Toggle Archived Notes") { _ in
+            self.toggleArchive()
+        }
         
-        //Configure menu button
+        let toggleSecured = UIAction(title: "Toggle Secured Notes") { _ in
+            self.toggleSecureNoteView()
+        }
         
-        let secureOptionTitle = shouldShowSecureNotes ? "Hide Secure notes" : "Show secure notes"
+        let backup = UIAction(title: "Backup") { _ in
+            self.backupNotes()
+        }
         
-        let menu = UIMenu(title: "", children: [
-            UIAction(title: "Archive", handler: { (_) in self.navigateToArchive()}),  // navigate to diffrent page to show archive notes
-            UIAction(title: secureOptionTitle, handler: { (_) in self.toggleSecureNoteView()}),    // should hide/show secure notes
-            UIAction(title: "delete all notes", handler: { (_) in self.deleteAllNotes()}), // makes notes empty
-        ])
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "list.number"), menu: menu)
+        let restore = UIAction(title: "Restore") { _ in
+            self.restoreNotes()
+        }
+        
+        let deleteAll = UIAction(title: "Delete All") { _ in
+            self.deleteAllNotes()
+        }
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "",
+                                                            image: UIImage(systemName: "list.number"),
+                                                            menu: .init(title: "",
+                                                                        children: [
+                                                                            toggleArchived,
+                                                                            toggleSecured,
+                                                                            backup,
+                                                                            restore,
+                                                                            deleteAll,
+                                                                        ]))
     }
     
-    // toggles securenoteview
+}
+
+extension HomeViewController {
+    
+    func toggleArchive() {
+        toggleArchivedNotes = !toggleArchivedNotes
+        tableView.reloadData()
+    }
+    
     func toggleSecureNoteView() {
-        shouldShowSecureNotes = !shouldShowSecureNotes
-        table.reloadData()
+        toggleSecuredNotes = !toggleSecuredNotes
+        tableView.reloadData()
     }
     
     func deleteAllNotes() {
         betterNoteManager.clear()
-        table.reloadData()
+        tableView.reloadData()
     }
     
-    
-    @IBAction func addButtonPressed(_ sender: Any) {
-        let sb : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+    func goToCreateNoteScreen() {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         
         let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
         vc.betterNoteManager = betterNoteManager
@@ -97,12 +118,19 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         self.show(vc, sender: nil)
     }
     
-    //table view functions
+}
+
+//MARK: Button Actions
+extension HomeViewController {
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+    @IBAction func addButtonPressed(_ sender: Any) {
+        goToCreateNoteScreen()
     }
-    
+
+}
+
+//MARK: TableView Datasource
+extension HomeViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return notes.count
@@ -125,10 +153,19 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         return cell
     }
     
+}
+
+//MARK: TableView Delegate
+extension HomeViewController: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let note = notes[indexPath.row]
         
-        let delete = UIContextualAction(style: .destructive, title: "delete") { (_, _, _ ) in
+        let delete = UIContextualAction(style: .destructive, title: "Delete") { (_, _, _ ) in
             self.betterNoteManager.deleteNote(id: note.id)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         }
@@ -136,18 +173,19 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         let secureLabel = note.isSecured ? "Unsecure" : "Secure"
         let privacy = UIContextualAction(style: .normal , title: secureLabel) { (_, _, _ ) in
             self.betterNoteManager.secureNote(id: note.id, secure: !note.isSecured)
-            self.table.reloadData()
+            self.tableView.reloadData()
         }
         
-        let archive = UIContextualAction(style: .normal, title: "Archive") { (_, _, _) in
+        let archiveLabel = note.isArchived ? "Unarchive" : "Archive"
+        let archive = UIContextualAction(style: .normal, title: archiveLabel) { (_, _, _) in
             self.betterNoteManager.archiveNote(!note.isArchived, id: note.id)
-            self.table.reloadData()
+            self.tableView.reloadData()
         }
 
         let pinLabel = note.isPinned ? "Unpin" : "Pin"
         let pin = UIContextualAction(style: .normal, title: pinLabel) { (_, _, _) in
             self.betterNoteManager.pinNote(id: note.id, pin: !note.isPinned)
-            self.table.reloadData()
+            self.tableView.reloadData()
         }
         
         pin.backgroundColor = .systemYellow
@@ -156,8 +194,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         return UISwipeActionsConfiguration(actions: [delete, archive, privacy, pin])
     }
-    
-    // select a note from table view
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let sb = UIStoryboard(name: "Main", bundle:nil)
@@ -168,14 +204,55 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         
         self.show(vc, sender: nil)
     }
+    
 }
 
-
+//MARK: Search bar related
 extension HomeViewController: UISearchBarDelegate {
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        table.reloadData()
+        tableView.reloadData()
     }
 
 }
+
+//MARK: Read/Write from Disk
+extension HomeViewController {
+    
+    func backupNotes() {
+        let contents = betterNoteManager.getPinnedNotes() + betterNoteManager.getNormalNotes() + betterNoteManager.getArchivedNotes()
+        
+        do {
+            let data = try JSONEncoder().encode(contents)
+            
+            let filename = "notes.backup"
+            if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(filename) {
+                try data.write(to: url)
+                print("backed up successfully")
+            } else {
+                print("error: unable to backup")
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func restoreNotes()  {
+        let filename = "notes.backup"
+        if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(filename) {
+            do {
+                let data = try Data(contentsOf: url)
+                let notes = try JSONDecoder().decode([BetterNote].self, from: data)
+                betterNoteManager.addNotes(notes)
+                tableView.reloadData()
+            } catch {
+                print(error.localizedDescription)
+            }
+        } else {
+            print("error: unable to restore")
+        }
+    }
+    
+}
+
