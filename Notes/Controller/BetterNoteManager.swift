@@ -119,12 +119,16 @@ class BetterNoteManager {
     
     @discardableResult
     func addNote(title: String?, content: String?) -> UUID? {
-        guard let note = BetterNote(title: title, content: content)
-        else { return nil }
+        if title != "" || content != "" {
+            guard let note = BetterNote(title: title, content: content)
+            else { return nil }
+            
+            normalNotes.insert(note, at: 0)
+            
+            return note.id
+        }
+        return nil
         
-        normalNotes.insert(note, at: 0)
-        
-        return note.id
     }
     
     @discardableResult
