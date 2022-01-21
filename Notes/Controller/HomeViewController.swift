@@ -7,6 +7,18 @@
 
 import UIKit
 
+//Reminder: ensure each commit addressed one issue or feature
+//
+//on tapping on empty space of the tableView, go to new note screen
+//find crashes & fix
+//explore trailing action on left; [pin, secure] [archive, delete]
+//change the toggle secure menu action label
+//- show archived / show normal
+//- show secured / hide secured
+//PP::Refactor VCs to MVVM
+//PP::Introduce APIs to read/write; provider pattern
+//Ready for 1huddle
+
 class HomeViewController: UIViewController {
 
     @IBOutlet weak var addButton: UIButton!
