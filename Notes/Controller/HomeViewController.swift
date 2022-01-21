@@ -48,6 +48,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setupMenuActions()
         setupTableView()
+        restoreNotes()
         
         searchField.delegate = self
     }
