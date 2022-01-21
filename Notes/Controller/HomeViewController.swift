@@ -75,16 +75,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "", image: UIImage(systemName: "list.number"), menu: menu)
     }
     
-    
-    // Navigates to Archive notes view
-    func navigateToArchive() {
-        let sb = UIStoryboard(name: "Main", bundle:nil)
-        let vc = sb.instantiateViewController(withIdentifier: "archiveVC") as! ArchiveViewController
-        vc.betterNoteManager = betterNoteManager
-        
-        show(vc, sender: nil)
-    }
-    
     // toggles securenoteview
     func toggleSecureNoteView() {
         shouldShowSecureNotes = !shouldShowSecureNotes
