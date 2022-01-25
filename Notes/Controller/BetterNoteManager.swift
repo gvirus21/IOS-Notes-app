@@ -236,3 +236,10 @@ class BetterNoteManager {
     }
     
 }
+
+
+// carsh - 1
+
+// - when you click on a note in archive mode, it will show empty create note screen
+// - when you press, go back button, app will crash
+  
