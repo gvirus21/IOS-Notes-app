@@ -36,7 +36,8 @@ class NewHomeViewController: UIViewController {
         super.viewDidLoad()
         title = "Notes"
         
-        setupUI() 
+        setupUI()
+        setupSearchField()
         setupCollectionView()
     }
     
@@ -50,13 +51,19 @@ class NewHomeViewController: UIViewController {
         addButton.layer.masksToBounds = true
     }
     
+    func setupSearchField() {
+        let primaryColor = UIColor(hexaString: "#082032")
+        searchField.placeholder = "search"
+        searchField.isTranslucent = true
+        searchField.barTintColor = primaryColor
+        searchField.backgroundColor = primaryColor
+        self.tabBarController?.navigationItem.titleView = searchField
+    }
+    
     func setupCollectionView() {
         
         let layout = UICollectionViewLayout()
- //     layout.itemSize = CGSize(width: 200, height: 200)
-        
         collectionView.collectionViewLayout = layout
-        
         collectionView.register(NoteCollectionViewCell.nib(), forCellWithReuseIdentifier: NoteCollectionViewCell.identifier)
         collectionView.delegate = self
         collectionView.dataSource = self
