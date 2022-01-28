@@ -43,7 +43,7 @@
                                 </cells>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7E0-ge-ys2">
-                                <rect key="frame" x="333" y="797" width="65" height="65"/>
+                                <rect key="frame" x="328" y="797" width="65" height="65"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="7E0-ge-ys2" secondAttribute="height" multiplier="1:1" id="9vf-IC-I59"/>
                                     <constraint firstAttribute="width" constant="65" id="AjF-p3-oYy"/>
@@ -51,9 +51,7 @@
                                 </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" cornerStyle="fixed">
-                                    <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" systemColor="systemGray6Color"/>
-                                    </backgroundConfiguration>
+                                    <backgroundConfiguration key="background" image="addNoteButton"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="addButtonPressed:" destination="wFd-DF-BQr" eventType="touchUpInside" id="Upt-1o-NrW"/>
@@ -64,7 +62,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="7E0-ge-ys2" secondAttribute="trailing" constant="30" id="C9T-06-K7e"/>
+                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="7E0-ge-ys2" secondAttribute="trailing" constant="35" id="C9T-06-K7e"/>
                             <constraint firstItem="33a-67-2Ih" firstAttribute="leading" secondItem="hbJ-cn-2Ib" secondAttribute="leading" constant="10" id="H5P-Zl-Wq4"/>
                             <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="33a-67-2Ih" secondAttribute="trailing" constant="10" id="SAt-cc-wNd"/>
                             <constraint firstItem="hbJ-cn-2Ib" firstAttribute="bottom" secondItem="33a-67-2Ih" secondAttribute="bottom" constant="10" id="WH8-Ub-68w"/>
@@ -157,6 +155,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="addNoteButton" width="892" height="892"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
@@ -165,9 +164,6 @@
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemGray6Color">
-            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tintColor">
             <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
