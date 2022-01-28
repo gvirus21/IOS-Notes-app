@@ -110,6 +110,7 @@
 		A298CA2D27732A9D007F3713 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A2880C26279EA9F2008C2E88 /* NewHomeViewController.swift */,
 				A288B29D2797E3F900016205 /* BetterNoteManager.swift */,
 				A27347EE276B50580043E794 /* AddNoteViewController.swift */,
 				A27347EC276B4FC10043E794 /* HomeViewController.swift */,
@@ -138,9 +139,6 @@
 		A2E8E2AF2769BFF2000CEDAF = {
 			isa = PBXGroup;
 			children = (
-				A2880C28279EBDAC008C2E88 /* NoteCollectionViewCell.swift */,
-				A2880C29279EBDAC008C2E88 /* NoteCollectionViewCell.xib */,
-				A2880C26279EA9F2008C2E88 /* NewHomeViewController.swift */,
 				A2E8E2BA2769BFF2000CEDAF /* Notes */,
 				A2E8E2D12769BFF3000CEDAF /* NotesTests */,
 				A2E8E2DB2769BFF3000CEDAF /* NotesUITests */,
@@ -169,6 +167,8 @@
 				A2E8E2C42769BFF3000CEDAF /* Assets.xcassets */,
 				A2E8E2C92769BFF3000CEDAF /* Info.plist */,
 				A298CA2F27732F6E007F3713 /* NoteTableViewCell.swift */,
+				A2880C28279EBDAC008C2E88 /* NoteCollectionViewCell.swift */,
+				A2880C29279EBDAC008C2E88 /* NoteCollectionViewCell.xib */,
 				A23A10CE276CA6E6009D6177 /* customTableViewCell.swift */,
 				A298CA3027732F6E007F3713 /* NoteTableViewCell.xib */,
 				A2E8E2BD2769BFF2000CEDAF /* SceneDelegate.swift */,

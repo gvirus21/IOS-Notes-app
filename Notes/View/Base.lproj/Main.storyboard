@@ -3,84 +3,12 @@
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
-        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Notes-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController storyboardIdentifier="HomeVC" id="BYZ-38-t0r" customClass="HomeViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="eMj-Bl-tyo">
-                                <rect key="frame" x="0.0" y="54" width="428" height="51"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </searchBar>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bw5-7g-wa5">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="44"/>
-                            </navigationBar>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="CXf-Er-uq4">
-                                <rect key="frame" x="0.0" y="105" width="428" height="787"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <color key="sectionIndexBackgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dTu-Sv-q0J">
-                                <rect key="frame" x="333.66666666666669" y="802.66666666666663" width="64.333333333333314" height="64.333333333333371"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="dTu-Sv-q0J" secondAttribute="height" multiplier="1:1" id="N9R-bc-H99"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="plain" imagePadding="6">
-                                    <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
-                                    <backgroundConfiguration key="background">
-                                        <color key="backgroundColor" red="1" green="0.90686528659999999" blue="0.20495804949999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </backgroundConfiguration>
-                                    <color key="baseForegroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
-                                <connections>
-                                    <action selector="addButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="paY-pO-18a"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <constraints>
-                            <constraint firstItem="CXf-Er-uq4" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="24t-8Z-7xp"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7oS-Sq-apS"/>
-                            <constraint firstItem="dTu-Sv-q0J" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.15" id="CoA-ig-cJo"/>
-                            <constraint firstItem="bw5-7g-wa5" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="top" id="H6n-0F-I4x"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="KW9-V3-w5i"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="M5v-po-sNn"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="CXf-Er-uq4" secondAttribute="bottom" id="Rwj-DK-5n1"/>
-                            <constraint firstItem="bw5-7g-wa5" firstAttribute="trailing" secondItem="eMj-Bl-tyo" secondAttribute="trailing" id="SeG-Ci-xDy"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="W66-Wf-Qdj"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="top" secondItem="bw5-7g-wa5" secondAttribute="bottom" constant="10" id="ZUF-gv-iXw"/>
-                            <constraint firstItem="bw5-7g-wa5" firstAttribute="leading" secondItem="eMj-Bl-tyo" secondAttribute="leading" id="Zef-0f-Wmo"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="dTu-Sv-q0J" secondAttribute="bottom" constant="25" id="aCu-yi-Mfz"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="bPO-Us-bBU"/>
-                            <constraint firstItem="CXf-Er-uq4" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="bU7-Og-uRF"/>
-                            <constraint firstItem="CXf-Er-uq4" firstAttribute="top" secondItem="eMj-Bl-tyo" secondAttribute="bottom" id="fU4-e3-jXz"/>
-                            <constraint firstItem="eMj-Bl-tyo" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="oVh-yM-ird"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dTu-Sv-q0J" secondAttribute="trailing" constant="30" id="yCC-5C-goU"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="Notes" id="1CN-Xg-UbK"/>
-                    <connections>
-                        <outlet property="addButton" destination="dTu-Sv-q0J" id="rze-dg-YGv"/>
-                        <outlet property="searchField" destination="eMj-Bl-tyo" id="JeK-rQ-IkG"/>
-                        <outlet property="tableView" destination="CXf-Er-uq4" id="qWF-dG-y8t"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1500" y="-1063"/>
-        </scene>
         <!--NewHomeViewController-->
         <scene sceneID="1Z6-kq-3lC">
             <objects>
@@ -93,23 +21,24 @@
                                 <rect key="frame" x="0.0" y="140" width="428" height="51"/>
                                 <textInputTraits key="textInputTraits"/>
                             </searchBar>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="tpu-9f-gj2">
-                                <rect key="frame" x="0.0" y="191" width="428" height="701"/>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="33a-67-2Ih">
+                                <rect key="frame" x="10" y="201" width="408" height="681"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="fd8-z9-gYQ">
-                                    <size key="itemSize" width="128" height="128"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="I13-3t-C3U">
+                                    <size key="itemSize" width="408" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="2qE-CU-tNK">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="NoteCollectionViewCell" id="1uL-cJ-VdJ">
+                                        <rect key="frame" x="0.0" y="0.0" width="408" height="128"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="2IT-Ag-7cV">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tIS-cY-9ET">
+                                            <rect key="frame" x="0.0" y="0.0" width="408" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                         </collectionViewCellContentView>
+                                        <size key="customSize" width="408" height="128"/>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -126,18 +55,21 @@
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                     </backgroundConfiguration>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="addButtonPressed:" destination="wFd-DF-BQr" eventType="touchUpInside" id="Upt-1o-NrW"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="hbJ-cn-2Ib"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="bottom" secondItem="tpu-9f-gj2" secondAttribute="bottom" id="28R-Vv-eka"/>
                             <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="7E0-ge-ys2" secondAttribute="trailing" constant="30" id="C9T-06-K7e"/>
-                            <constraint firstItem="tpu-9f-gj2" firstAttribute="leading" secondItem="hbJ-cn-2Ib" secondAttribute="leading" id="IQq-m2-hFg"/>
-                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="tpu-9f-gj2" secondAttribute="trailing" id="LXU-RE-FsE"/>
+                            <constraint firstItem="33a-67-2Ih" firstAttribute="leading" secondItem="hbJ-cn-2Ib" secondAttribute="leading" constant="10" id="H5P-Zl-Wq4"/>
+                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="trailing" secondItem="33a-67-2Ih" secondAttribute="trailing" constant="10" id="SAt-cc-wNd"/>
+                            <constraint firstItem="hbJ-cn-2Ib" firstAttribute="bottom" secondItem="33a-67-2Ih" secondAttribute="bottom" constant="10" id="WH8-Ub-68w"/>
                             <constraint firstItem="c3r-7R-5Qw" firstAttribute="top" secondItem="hbJ-cn-2Ib" secondAttribute="top" id="WTL-eF-AzH"/>
+                            <constraint firstItem="33a-67-2Ih" firstAttribute="top" secondItem="c3r-7R-5Qw" secondAttribute="bottom" constant="10" id="WU1-6l-ECm"/>
                             <constraint firstItem="hbJ-cn-2Ib" firstAttribute="bottom" secondItem="7E0-ge-ys2" secondAttribute="bottom" constant="30" id="YOh-5L-a2N"/>
-                            <constraint firstItem="tpu-9f-gj2" firstAttribute="top" secondItem="c3r-7R-5Qw" secondAttribute="bottom" id="oeA-zY-yTr"/>
                             <constraint firstItem="c3r-7R-5Qw" firstAttribute="leading" secondItem="hbJ-cn-2Ib" secondAttribute="leading" id="yWk-es-BQZ"/>
                             <constraint firstItem="c3r-7R-5Qw" firstAttribute="trailing" secondItem="hbJ-cn-2Ib" secondAttribute="trailing" id="zcO-df-Bpf"/>
                         </constraints>
@@ -145,13 +77,13 @@
                     <navigationItem key="navigationItem" title="Notes" largeTitleDisplayMode="always" id="5Md-BZ-AtK"/>
                     <connections>
                         <outlet property="addButton" destination="7E0-ge-ys2" id="QzG-RF-QVT"/>
-                        <outlet property="collectionView" destination="tpu-9f-gj2" id="a7m-iQ-9Jk"/>
+                        <outlet property="collectionView" destination="33a-67-2Ih" id="64M-Hm-aWn"/>
                         <outlet property="searchField" destination="c3r-7R-5Qw" id="vm4-kC-UEE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-0L-Y6a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1500" y="-338"/>
+            <point key="canvasLocation" x="1832" y="-728"/>
         </scene>
         <!--Add Note View Controller-->
         <scene sceneID="yGU-aV-Xve">
@@ -197,21 +129,6 @@
             </objects>
             <point key="canvasLocation" x="2717" y="-728"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="8cQ-ES-xy7">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Hyw-dH-xhJ" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" largeTitles="YES" id="Oh2-XS-Bay">
-                        <rect key="frame" x="0.0" y="44" width="428" height="96"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="kJX-jb-rrq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="631" y="-1063"/>
-        </scene>
         <!--Notes-->
         <scene sceneID="gCh-Ef-3Fb">
             <objects>
@@ -231,11 +148,10 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gHv-Pr-piS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="631" y="-338"/>
+            <point key="canvasLocation" x="928" y="-728"/>
         </scene>
     </scenes>
     <resources>
-        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

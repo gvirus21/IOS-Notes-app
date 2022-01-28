@@ -10,8 +10,9 @@ import UIKit
 class NewHomeViewController: UIViewController {
     
     @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var searchField: UISearchBar!
+    
+    @IBOutlet var collectionView: UICollectionView!
     
     var toggleSecuredNotes = true
     var toggleArchivedNotes = false
@@ -61,16 +62,33 @@ class NewHomeViewController: UIViewController {
     }
     
     func setupCollectionView() {
-        
-        let layout = UICollectionViewLayout()
-        collectionView.collectionViewLayout = layout
-        collectionView.register(NoteCollectionViewCell.nib(), forCellWithReuseIdentifier: NoteCollectionViewCell.identifier)
+        collectionView.register(NoteCollectionViewCell.nib(), forCellWithReuseIdentifier: NoteCollectionViewCell.cellIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
+        
     }
     
+    func goToCreateNoteScreen() {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        vc.betterNoteManager = betterNoteManager
+        
+        vc.modalPresentationStyle = .fullScreen
+        self.show(vc, sender: nil)
+    }
     
 }
+
+//MARK: Button Actions
+extension NewHomeViewController {
+    
+    @IBAction func addButtonPressed(_ sender: Any) {
+        goToCreateNoteScreen()
+    }
+
+}
+
 
 //MARK: UIColor extension
 
@@ -86,12 +104,15 @@ extension UIColor {
 //MARK: CollectionView delegates
 
 extension NewHomeViewController: UICollectionViewDelegate {
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         
         print("You tapped me")
     }
 }
+
+//MARK: CollectionView datasource
 
 extension NewHomeViewController: UICollectionViewDataSource {
     
@@ -100,16 +121,21 @@ extension NewHomeViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.identifier, for: indexPath) as! NoteCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.cellIdentifier, for: indexPath) as! NoteCollectionViewCell
+        
+        let note = notes[indexPath.row]
+        let cellVM = NoteCollectionViewCellVM(note: note)
+        cell.configure(viewModel: cellVM)
         return cell
     }
     
 }
 
+
 extension NewHomeViewController: UICollectionViewDelegateFlowLayout {
-    
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
+
         return CGSize(width: 200, height: 200)
     }
 }
