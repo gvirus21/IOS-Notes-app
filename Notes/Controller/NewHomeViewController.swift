@@ -12,6 +12,9 @@ class NewHomeViewController: UIViewController {
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchField: UISearchBar!
     
+    
+    static let primaryColor = UIColor(hexaString: "#082032")
+    
     @IBOutlet var collectionView: UICollectionView!
     
     var toggleSecuredNotes = true
@@ -43,8 +46,7 @@ class NewHomeViewController: UIViewController {
     }
     
     func setupUI() {
-        let primaryColor = UIColor(hexaString: "#082032")
-        view.backgroundColor = primaryColor
+        view.backgroundColor = Self.primaryColor
         
         collectionView.backgroundColor = .clear
         

@@ -17,13 +17,40 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        setUI()
+        setDelegates()
+        setNote()
+        
+    }
+    
+    func setUI() {
+        view.backgroundColor = NewHomeViewController.primaryColor
+        
+        titleTextField.backgroundColor = .clear
+        titleTextField.textColor = .white
+        titleTextField.placeholder = "Title"
+        
+        //setting placeholder text color
+        titleTextField.attributedPlaceholder = NSAttributedString(
+            string: "Title",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.5)]
+            
+        )
+        
+        noteTextView.backgroundColor = .clear
+        noteTextView.textColor = .white
+    }
+    
+    func setDelegates() {
         titleTextField?.delegate = self
         noteTextView?.delegate = self
-        
+    }
+    
+    func setNote() {
         let note = betterNoteManager.getAllNotes().first { $0.id == noteID }
         titleTextField.text = note?.title
         noteTextView.text = note?.content
+
     }
     
     func saveNote() {
