@@ -84,7 +84,6 @@ class BetterNoteManager {
     
     func getAllNotes(searchTerm: String? = nil) -> [BetterNote] {
         let notes = pinnedNotes + normalNotes
-        print("inManager notes: \(notes)")
         
         if let searchTerm = searchTerm, searchTerm.isEmpty == false {
             return notes.filter { (note) in

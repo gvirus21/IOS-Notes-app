@@ -25,7 +25,6 @@ class NewHomeViewController: UIViewController {
     
     var notes: [BetterNote] {
         let notes = betterNoteManager.getAllNotes(searchTerm: searchField.text)
-        print("notes: \(notes)")
         
         if toggleArchivedNotes {
             return betterNoteManager.getArchivedNotes()
@@ -51,10 +50,23 @@ class NewHomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         collectionView.reloadData()
-        print("appered")
-        print(notes)
     }
+    
+    func goToCreateNoteScreen() {
+        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
+        
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        vc.betterNoteManager = betterNoteManager
+        
+        vc.modalPresentationStyle = .fullScreen
+        self.show(vc, sender: nil)
+    }
+    
+}
 
+//MARK: Setup functions
+
+extension NewHomeViewController {
     func setupUI() {
         view.backgroundColor = Self.primaryColor
         
@@ -69,28 +81,43 @@ class NewHomeViewController: UIViewController {
         setupMenuActions()
     }
     
+    func toggleArchive() {
+        toggleArchivedNotes = !toggleArchivedNotes
+        collectionView.reloadData()
+    }
+    
+    func toggleSecureNoteView() {
+        toggleSecuredNotes = !toggleSecuredNotes
+        collectionView.reloadData()
+    }
+    
+    func deleteAllNotes() {
+        betterNoteManager.clear()
+        collectionView.reloadData()
+    }
+    
     func setupMenuActions() {
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
         let toggleArchived = UIAction(title: "Toggle Archived Notes") { _ in
-            
+            self.toggleArchive()
         }
         
         let toggleSecured = UIAction(title: "Toggle Secured Notes") { _ in
-            
+            self.toggleSecureNoteView()
         }
         
         let backup = UIAction(title: "Backup") { _ in
-
+            self.backupNotes()
         }
         
         let restore = UIAction(title: "Restore") { _ in
-
+            self.restoreNotes()
         }
         
         let deleteAll = UIAction(title: "Delete All") { _ in
-
+            self.deleteAllNotes()
         }
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "",
@@ -126,17 +153,6 @@ class NewHomeViewController: UIViewController {
         collectionView.dataSource = self
         
     }
-    
-    func goToCreateNoteScreen() {
-        let sb: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-        
-        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
-        vc.betterNoteManager = betterNoteManager
-        
-        vc.modalPresentationStyle = .fullScreen
-        self.show(vc, sender: nil)
-    }
-    
 }
 
 //MARK: Button Actions
@@ -144,12 +160,6 @@ extension NewHomeViewController {
     @IBAction func addButtonPressed(_ sender: Any) {
         goToCreateNoteScreen()
     }
-    
-    @IBAction func menuButtonPressed(_ sender: Any) {
-        
-    }
-    
-    
 }
 
 
@@ -180,7 +190,6 @@ extension NewHomeViewController: UICollectionViewDelegate {
 extension NewHomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(notes)
         return notes.count
     }
     
@@ -193,6 +202,7 @@ extension NewHomeViewController: UICollectionViewDataSource {
         cell.configure(viewModel: cellVM)
         cell.layer.cornerRadius = 20
         cell.backgroundColor = UIColor(hexaString: "#202240")
+        
         return cell
     }
     
