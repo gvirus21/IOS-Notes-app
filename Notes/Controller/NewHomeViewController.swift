@@ -14,7 +14,7 @@ class NewHomeViewController: UIViewController {
     @IBOutlet weak var menuButton: UIButton!
     
     
-    static let primaryColor = UIColor(hexaString: "#08070D")
+    let primaryColor = UIColor(hexaString: "#08070D")
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -50,6 +50,7 @@ class NewHomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         collectionView.reloadData()
+        self.backupNotes()
     }
     
     func goToCreateNoteScreen() {
@@ -68,7 +69,7 @@ class NewHomeViewController: UIViewController {
 
 extension NewHomeViewController {
     func setupUI() {
-        view.backgroundColor = Self.primaryColor
+        view.backgroundColor = primaryColor
         
         collectionView.backgroundColor = .clear
         
@@ -133,8 +134,6 @@ extension NewHomeViewController {
     }
     
     func setupSearchField() {
-        let primaryColor = UIColor(hexaString: "#08070D")
-
         searchField.placeholder = "search"
         searchField.isTranslucent = true
         searchField.barTintColor = primaryColor
@@ -180,8 +179,14 @@ extension NewHomeViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
+            
+        let sb = UIStoryboard(name: "Main", bundle:nil)
         
-        print("You tapped me")
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        vc.betterNoteManager = betterNoteManager
+        vc.noteID = notes[indexPath.row].id
+        
+        self.show(vc, sender: nil)
     }
 }
 
@@ -200,6 +205,7 @@ extension NewHomeViewController: UICollectionViewDataSource {
         let note = notes[indexPath.row]
         let cellVM = NoteCollectionViewCellVM(note: note)
         cell.configure(viewModel: cellVM)
+        
         cell.layer.cornerRadius = 20
         cell.backgroundColor = UIColor(hexaString: "#202240")
         

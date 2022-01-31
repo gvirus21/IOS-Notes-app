@@ -24,7 +24,7 @@ class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDe
     }
     
     func setUI() {
-        view.backgroundColor = NewHomeViewController.primaryColor
+        view.backgroundColor = UIColor(hexaString: "#202240")
         
         titleTextField.backgroundColor = .clear
         titleTextField.textColor = .white
