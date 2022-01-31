@@ -3,6 +3,7 @@
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -74,10 +75,23 @@
                             <constraint firstItem="c3r-7R-5Qw" firstAttribute="trailing" secondItem="hbJ-cn-2Ib" secondAttribute="trailing" id="zcO-df-Bpf"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Notes" largeTitleDisplayMode="always" id="5Md-BZ-AtK"/>
+                    <navigationItem key="navigationItem" title="Notes" largeTitleDisplayMode="always" id="5Md-BZ-AtK">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="252-1t-rhf">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="8Gt-Sp-7CS">
+                                <rect key="frame" x="313" y="5" width="95" height="34.333333333333336"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain">
+                                    <imageReference key="image" image="list.triangle" catalog="system" symbolScale="large"/>
+                                    <preferredSymbolConfiguration key="preferredSymbolConfigurationForImage" scale="large"/>
+                                </buttonConfiguration>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="7E0-ge-ys2" id="QzG-RF-QVT"/>
                         <outlet property="collectionView" destination="33a-67-2Ih" id="64M-Hm-aWn"/>
+                        <outlet property="menuButton" destination="8Gt-Sp-7CS" id="gJA-pe-FlD"/>
                         <outlet property="searchField" destination="c3r-7R-5Qw" id="vm4-kC-UEE"/>
                     </connections>
                 </viewController>
@@ -157,6 +171,7 @@
     </scenes>
     <resources>
         <image name="addNoteButton" width="892" height="892"/>
+        <image name="list.triangle" catalog="system" width="128" height="91"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

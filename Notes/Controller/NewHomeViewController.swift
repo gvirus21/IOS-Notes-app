@@ -11,6 +11,7 @@ class NewHomeViewController: UIViewController {
     
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchField: UISearchBar!
+    @IBOutlet weak var menuButton: UIButton!
     
     
     static let primaryColor = UIColor(hexaString: "#08070D")
@@ -42,6 +43,7 @@ class NewHomeViewController: UIViewController {
         title = "Notes"
         
         setupUI()
+        setupMenuButton()
         setupSearchField()
         setupCollectionView()
         restoreNotes()
@@ -60,6 +62,47 @@ class NewHomeViewController: UIViewController {
         
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
+    }
+    
+    func setupMenuButton() {
+        menuButton.sizeToFit()
+        setupMenuActions()
+    }
+    
+    func setupMenuActions() {
+        addButton.layer.cornerRadius = addButton.frame.width / 2
+        addButton.layer.masksToBounds = true
+        
+        let toggleArchived = UIAction(title: "Toggle Archived Notes") { _ in
+            
+        }
+        
+        let toggleSecured = UIAction(title: "Toggle Secured Notes") { _ in
+            
+        }
+        
+        let backup = UIAction(title: "Backup") { _ in
+
+        }
+        
+        let restore = UIAction(title: "Restore") { _ in
+
+        }
+        
+        let deleteAll = UIAction(title: "Delete All") { _ in
+
+        }
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "",
+                                                            image: UIImage(systemName: "list.number"),
+                                                            menu: .init(title: "",
+                                                                        children: [
+                                                                            toggleArchived,
+                                                                            toggleSecured,
+                                                                            backup,
+                                                                            restore,
+                                                                            deleteAll,
+                                                                        ]))
     }
     
     func setupSearchField() {
@@ -101,7 +144,14 @@ extension NewHomeViewController {
     @IBAction func addButtonPressed(_ sender: Any) {
         goToCreateNoteScreen()
     }
+    
+    @IBAction func menuButtonPressed(_ sender: Any) {
+        
+    }
+    
+    
 }
+
 
 //MARK: UIColor extension
 

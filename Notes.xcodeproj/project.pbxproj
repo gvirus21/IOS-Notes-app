@@ -45,8 +45,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		A2128E732788392700552077 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
-		A2128E742788392700552077 /* icon.svg */ = {isa = PBXFileReference; lastKnownFileType = text; path = icon.svg; sourceTree = "<group>"; };
 		A23A10CE276CA6E6009D6177 /* customTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = customTableViewCell.swift; sourceTree = "<group>"; };
 		A27347EC276B4FC10043E794 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		A27347EE276B50580043E794 /* AddNoteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoteViewController.swift; sourceTree = "<group>"; };
@@ -96,15 +94,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		A2128E722788392700552077 /* Notes icons */ = {
-			isa = PBXGroup;
-			children = (
-				A2128E732788392700552077 /* icon.png */,
-				A2128E742788392700552077 /* icon.svg */,
-			);
-			path = "Notes icons";
-			sourceTree = "<group>";
-		};
 		A298CA2D27732A9D007F3713 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -129,7 +118,6 @@
 		A298CA33277342C1007F3713 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A2128E722788392700552077 /* Notes icons */,
 			);
 			name = Model;
 			sourceTree = "<group>";
