@@ -18,11 +18,12 @@ struct NoteCollectionViewCellVM {
 class NoteCollectionViewCell: UICollectionViewCell {
     
     static let cellIdentifier = "NoteCollectionViewCell"
-    
+
     @IBOutlet var headingLabel: UILabel!
     @IBOutlet var contentLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var pinLabel: UILabel!
+    
     
     static func nib() -> UINib {
         return UINib(nibName: "NoteCollectionViewCell", bundle: nil)
@@ -34,3 +35,4 @@ class NoteCollectionViewCell: UICollectionViewCell {
         dateLabel.text = viewModel.modifiedDateText
     }    
 }
+

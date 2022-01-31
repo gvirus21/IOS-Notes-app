@@ -13,7 +13,7 @@ class NewHomeViewController: UIViewController {
     @IBOutlet weak var searchField: UISearchBar!
     
     
-    static let primaryColor = UIColor(hexaString: "#082032")
+    static let primaryColor = UIColor(hexaString: "#08070D")
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -24,6 +24,7 @@ class NewHomeViewController: UIViewController {
     
     var notes: [BetterNote] {
         let notes = betterNoteManager.getAllNotes(searchTerm: searchField.text)
+        print("notes: \(notes)")
         
         if toggleArchivedNotes {
             return betterNoteManager.getArchivedNotes()
@@ -43,8 +44,15 @@ class NewHomeViewController: UIViewController {
         setupUI()
         setupSearchField()
         setupCollectionView()
+        restoreNotes()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        collectionView.reloadData()
+        print("appered")
+        print(notes)
+    }
+//
     func setupUI() {
         view.backgroundColor = Self.primaryColor
         
@@ -55,7 +63,8 @@ class NewHomeViewController: UIViewController {
     }
     
     func setupSearchField() {
-        let primaryColor = UIColor(hexaString: "#082032")
+        let primaryColor = UIColor(hexaString: "#08070D")
+
         searchField.placeholder = "search"
         searchField.isTranslucent = true
         searchField.barTintColor = primaryColor
@@ -64,6 +73,10 @@ class NewHomeViewController: UIViewController {
     }
     
     func setupCollectionView() {
+        let layout = UICollectionViewFlowLayout()
+        layout.itemSize = CGSize(width: 400, height: 150)
+        
+        collectionView.collectionViewLayout = layout
         collectionView.register(NoteCollectionViewCell.nib(), forCellWithReuseIdentifier: NoteCollectionViewCell.cellIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -84,13 +97,10 @@ class NewHomeViewController: UIViewController {
 
 //MARK: Button Actions
 extension NewHomeViewController {
-    
     @IBAction func addButtonPressed(_ sender: Any) {
         goToCreateNoteScreen()
     }
-
 }
-
 
 //MARK: UIColor extension
 
@@ -119,15 +129,19 @@ extension NewHomeViewController: UICollectionViewDelegate {
 extension NewHomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(notes)
         return notes.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.cellIdentifier, for: indexPath) as! NoteCollectionViewCell
         
         let note = notes[indexPath.row]
         let cellVM = NoteCollectionViewCellVM(note: note)
         cell.configure(viewModel: cellVM)
+        cell.layer.cornerRadius = 20
+        cell.backgroundColor = UIColor(hexaString: "#202240")
         return cell
     }
     
@@ -138,6 +152,45 @@ extension NewHomeViewController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
 
-        return CGSize(width: 200, height: 200)
+        return CGSize(width: 400, height: 150)
     }
 }
+
+//MARK: Read/Write from Disk
+extension NewHomeViewController {
+    
+    func backupNotes() {
+        let contents = betterNoteManager.getPinnedNotes() + betterNoteManager.getNormalNotes() + betterNoteManager.getArchivedNotes()
+        
+        do {
+            let data = try JSONEncoder().encode(contents)
+            
+            let filename = "notes.backup"
+            if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(filename) {
+                try data.write(to: url)
+                print("backed up successfully")
+            } else {
+                print("error: unable to backup")
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func restoreNotes()  {
+        let filename = "notes.backup"
+        if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(filename) {
+            do {
+                let data = try Data(contentsOf: url)
+                let notes = try JSONDecoder().decode([BetterNote].self, from: data)
+                betterNoteManager.addNotes(notes)
+                collectionView.reloadData()
+            } catch {
+                print(error.localizedDescription)
+            }
+        } else {
+            print("error: unable to restore")
+        }
+    }
+}
+
