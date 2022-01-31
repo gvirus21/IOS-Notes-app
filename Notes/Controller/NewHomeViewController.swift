@@ -52,7 +52,7 @@ class NewHomeViewController: UIViewController {
         print("appered")
         print(notes)
     }
-//
+
     func setupUI() {
         view.backgroundColor = Self.primaryColor
         
@@ -68,6 +68,7 @@ class NewHomeViewController: UIViewController {
         searchField.placeholder = "search"
         searchField.isTranslucent = true
         searchField.barTintColor = primaryColor
+        searchField.searchTextField.textColor = .white
         searchField.backgroundColor = primaryColor
         self.tabBarController?.navigationItem.titleView = searchField
     }
