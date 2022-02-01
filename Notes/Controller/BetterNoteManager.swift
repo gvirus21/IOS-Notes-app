@@ -52,8 +52,6 @@ struct BetterNote: Codable {
 
 class BetterNoteManager {
     
-    //static var shared = BetterNoteManager()
-    
     private var normalNotes: [BetterNote] = []
     private var pinnedNotes: [BetterNote] = []
     private var archivedNotes: [BetterNote] = []
@@ -204,7 +202,7 @@ class BetterNoteManager {
     }
     
     @discardableResult
-    func archiveNote(_ archive: Bool, id: UUID) -> Bool {
+    func archiveNote(id: UUID, archive: Bool) -> Bool {
         func archiveNote(fromArray: inout [BetterNote]) -> Bool {
             guard let foundIndex = fromArray.firstIndex(where: { $0.id == id }) else { return false }
             var note = fromArray.remove(at: foundIndex)

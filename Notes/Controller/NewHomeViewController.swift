@@ -133,6 +133,7 @@ extension NewHomeViewController {
                                                                         ]))
     }
     
+    
     func setupSearchField() {
         searchField.placeholder = "search"
         searchField.isTranslucent = true
@@ -201,6 +202,45 @@ extension NewHomeViewController: UICollectionViewDelegate {
         
         self.show(vc, sender: nil)
     }
+        
+    // longpress action on collectionviewcell
+    
+    func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) {
+            _ in
+            
+            return UIMenu(
+                title: "",
+                          image: nil,
+                          identifier: nil,
+                          options: UIMenu.Options.displayInline,
+                          children: [
+                            UIAction(title: "Pin") { _ in
+                                let _pin = self.notes[indexPath.row].isPinned ? false : true
+                                self.betterNoteManager.pinNote(id: self.notes[indexPath.row].id, pin: _pin)
+                                self.collectionView.reloadData()
+                                },
+                            UIAction(title: "Secure") { _ in
+                                let _secure = self.notes[indexPath.row].isSecured ? false : true
+                                self.betterNoteManager.secureNote(id: self.notes[indexPath.row].id, secure: _secure)
+                                self.collectionView.reloadData()
+                                },
+                            UIAction(title: "Archive") { _ in
+                                let _archive = self.notes[indexPath.row].isArchived ? false : true
+                                self.betterNoteManager.archiveNote(id: self.notes[indexPath.row].id, archive: _archive)
+                                self.collectionView.reloadData()
+                            },
+                            UIAction(title: "Delete") { _ in
+                                self.betterNoteManager.deleteNote(id: self.notes[indexPath.row].id)
+                                self.collectionView.reloadData()
+                            }
+                              ]
+            )
+        }
+        
+        return config
+    }
+
 }
 
 //MARK: CollectionView datasource
