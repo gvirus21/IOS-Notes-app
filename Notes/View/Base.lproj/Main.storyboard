@@ -92,7 +92,7 @@
                         <outlet property="addButton" destination="7E0-ge-ys2" id="QzG-RF-QVT"/>
                         <outlet property="collectionView" destination="33a-67-2Ih" id="64M-Hm-aWn"/>
                         <outlet property="menuButton" destination="8Gt-Sp-7CS" id="gJA-pe-FlD"/>
-                        <outlet property="searchField" destination="c3r-7R-5Qw" id="vm4-kC-UEE"/>
+                        <outlet property="searchField" destination="c3r-7R-5Qw" id="MAa-7N-xEI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-0L-Y6a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

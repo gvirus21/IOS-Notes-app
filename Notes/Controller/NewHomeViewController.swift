@@ -140,6 +140,8 @@ extension NewHomeViewController {
         searchField.searchTextField.textColor = .white
         searchField.backgroundColor = primaryColor
         self.tabBarController?.navigationItem.titleView = searchField
+        
+        searchField.delegate = self
     }
     
     func setupCollectionView() {
@@ -171,6 +173,17 @@ extension UIColor {
                   green: .init(strtoul(String(chars[2...3]),nil,16))/255,
                   blue:  .init(strtoul(String(chars[4...5]),nil,16))/255,
                   alpha: alpha)}
+}
+
+//MARK: Searchbar extension
+
+extension NewHomeViewController: UISearchBarDelegate {
+
+    @IBAction func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+        collectionView.reloadData()
+    }
+
 }
 
 //MARK: CollectionView delegates
