@@ -242,11 +242,18 @@ extension HomeVC: UICollectionViewDelegate {
             }
         }()
         
-        let archiveAction = UIAction(title: "Archive", image: UIImage(systemName: "archivebox.circle")) { _ in
-            let shouldArchive = note.isArchived ? false : true
-            self.betterNoteManager.archiveNote(id: note.id, archive: shouldArchive)
-            self.collectionView.reloadData()
-        }
+        let archiveAction: UIAction = {
+            let title = note.isArchived ? "Unarchive" : "Archive"
+            let imageName = note.isArchived ? "archivebox.circle.fill" : "archivebox.circle"
+            
+            let image = UIImage(systemName: imageName)
+            
+            return UIAction(title: title, image: image) { _ in
+                let shouldArchive = !note.isArchived
+                self.betterNoteManager.archiveNote(id: note.id, archive: shouldArchive)
+                self.collectionView.reloadData()
+            }
+        }()
         
         let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash.circle")) { _ in
             self.betterNoteManager.deleteNote(id: note.id)
@@ -254,7 +261,7 @@ extension HomeVC: UICollectionViewDelegate {
             self.backupNotes()
         }
         
-        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+        let normalConfig = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
             return UIMenu(title: "",
                           image: nil,
                           identifier: nil,
@@ -266,7 +273,16 @@ extension HomeVC: UICollectionViewDelegate {
             )
         }
         
-        return config
+        let archiveConfig = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            return UIMenu(title: "",
+                          image: nil,
+                          identifier: nil,
+                          options: UIMenu.Options.displayInline,
+                          children: [archiveAction]
+            )
+        }
+        
+        return shouldShowArchivedNotes ? archiveConfig : normalConfig
     }
 
 }
