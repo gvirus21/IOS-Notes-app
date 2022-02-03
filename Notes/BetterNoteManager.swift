@@ -110,6 +110,7 @@ class BetterNoteManager {
     
     @discardableResult
     func editNote(id: UUID, title: String?, content: String?) -> Bool {
+        
         func editNote(inArray: inout [Note]) -> Bool {
             guard let foundIndex = inArray.firstIndex(where: { $0.id == id }) else { return false }
             
@@ -124,7 +125,7 @@ class BetterNoteManager {
             }
         }
         
-        return editNote(inArray: &normalNotes) || editNote(inArray: &pinnedNotes) || editNote(inArray: &archivedNotes)
+        return editNote(inArray: &archivedNotes) || editNote(inArray: &pinnedNotes) || editNote(inArray: &normalNotes)
     }
     
     @discardableResult

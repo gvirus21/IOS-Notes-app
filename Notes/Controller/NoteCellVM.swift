@@ -20,6 +20,7 @@ struct NoteCellVM {
     }
     
     var isPinned: Bool { note.isPinned }
+    var isArchived: Bool { note.isArchived }
     
     init(note: Note) {
         self.note = note

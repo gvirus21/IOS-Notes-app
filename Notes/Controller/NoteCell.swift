@@ -38,7 +38,7 @@ class NoteCell: UICollectionViewCell {
         contentLabel.text = viewModel.noteContent
         dateLabel.text = viewModel.modifiedDateText
         
-        pinImageView.isHidden = !viewModel.isPinned
+        pinImageView.isHidden = viewModel.isArchived || !viewModel.isPinned 
     }    
 }
 

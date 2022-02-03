@@ -47,7 +47,12 @@ class AddNoteVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     }
     
     func setNote() {
-        let note = betterNoteManager.getAllNotes().first { $0.id == noteID }
+      
+        var note = betterNoteManager.getArchivedNotes().first { $0.id == noteID }
+        
+        if note == nil {
+            note = betterNoteManager.getNormalNotes().first { $0.id == noteID }
+        }
         titleTextField.text = note?.title
         noteTextView.text = note?.content
 

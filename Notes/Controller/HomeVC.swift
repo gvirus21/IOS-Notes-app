@@ -21,18 +21,18 @@ class HomeVC: UIViewController {
     
     @IBOutlet var collectionView: UICollectionView!
     
-    var toggleSecuredNotes = true
-    var toggleArchivedNotes = false
+    var shouldShowSecuredNotes = true
+    var shouldShowArchivedNotes = false
     
     var betterNoteManager = BetterNoteManager()
     
     var notes: [Note] {
         let notes = betterNoteManager.getAllNotes(searchTerm: searchField.text)
         
-        if toggleArchivedNotes {
+        if shouldShowArchivedNotes {
             return betterNoteManager.getArchivedNotes()
         } else {
-            if toggleSecuredNotes {
+            if shouldShowSecuredNotes {
                 return notes
             } else {
                 return notes.filter { $0.isSecured == false }
@@ -111,12 +111,12 @@ extension HomeVC {
     }
     
     func toggleArchive() {
-        toggleArchivedNotes = !toggleArchivedNotes
+        shouldShowArchivedNotes = !shouldShowArchivedNotes
         collectionView.reloadData()
     }
     
     func toggleSecureNoteView() {
-        toggleSecuredNotes = !toggleSecuredNotes
+        shouldShowSecuredNotes = !shouldShowSecuredNotes
         collectionView.reloadData()
     }
     
@@ -129,11 +129,12 @@ extension HomeVC {
         addButton.layer.cornerRadius = addButton.frame.width / 2
         addButton.layer.masksToBounds = true
         
-        let toggleArchived = UIAction(title: "Toggle Archived Notes") { _ in
+        let toggleArchived = UIAction(title: shouldShowArchivedNotes ? "Unarchive Notes" : "Archive Notes") { _ in
             self.toggleArchive()
+            self.collectionView.reloadData()
         }
         
-        let toggleSecured = UIAction(title: "Toggle Secured Notes") { _ in
+        let toggleSecured = UIAction(title: shouldShowSecuredNotes ? "Hide Secured Notes" : "Show Secured Notes") { _ in
             self.toggleSecureNoteView()
         }
         
@@ -242,8 +243,8 @@ extension HomeVC: UICollectionViewDelegate {
         }()
         
         let archiveAction = UIAction(title: "Archive", image: UIImage(systemName: "archivebox.circle")) { _ in
-            let _archive = note.isArchived ? false : true
-            self.betterNoteManager.archiveNote(id: note.id, archive: _archive)
+            let shouldArchive = note.isArchived ? false : true
+            self.betterNoteManager.archiveNote(id: note.id, archive: shouldArchive)
             self.collectionView.reloadData()
         }
         
