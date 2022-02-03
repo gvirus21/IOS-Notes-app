@@ -7,56 +7,13 @@
 
 import Foundation
 
-struct BetterNote: Codable {
-    let id: UUID
-    var title: String?
-    var content: String?
-    
-    var isPinned: Bool
-    var isSecured: Bool
-    var isArchived: Bool
-    
-    let dateCreated: Date
-    var dateModified: Date
-    
-    init?(id: UUID = UUID(), title: String? = nil, content: String? = nil, isPinned: Bool = false, isSecured: Bool = false, isArchived: Bool = false, dateCreated: Date = Date(), dateModified: Date = Date()) {
-        if title == nil, content == nil {
-            return nil
-        }
-        
-        self.id           = id
-        self.title        = title
-        self.content      = content
-        self.isPinned     = isPinned
-        self.isSecured    = isSecured
-        self.isArchived   = isArchived
-        self.dateCreated  = dateCreated
-        self.dateModified = dateModified
-    }
-}
-
-///
-///Add Note
-///Delete Note
-///Edit Note
-///Secure Note
-///Archive Note
-///Pin Note
-///Delete all notes
-///
-///Cleanup the ViewController
-///
-///D.R.Y optimizations
-///Data Persistence; Read/Write from some persistent data source
-///MVVM
-
 class BetterNoteManager {
     
-    private var normalNotes: [BetterNote] = []
-    private var pinnedNotes: [BetterNote] = []
-    private var archivedNotes: [BetterNote] = []
+    private var normalNotes: [Note] = []
+    private var pinnedNotes: [Note] = []
+    private var archivedNotes: [Note] = []
     
-    init(notes: [BetterNote] = []) {
+    init(notes: [Note] = []) {
         for note in notes {
             if note.isArchived {
                 archivedNotes.append(note)
@@ -68,7 +25,7 @@ class BetterNoteManager {
         }
     }
     
-    func addNotes(_ notes: [BetterNote]) {
+    func addNotes(_ notes: [Note]) {
         for note in notes {
             if note.isArchived, !archivedNotes.contains(where: { $0.id == note.id }) {
                 archivedNotes.append(note)
@@ -80,7 +37,7 @@ class BetterNoteManager {
         }
     }
     
-    func getAllNotes(searchTerm: String? = nil) -> [BetterNote] {
+    func getAllNotes(searchTerm: String? = nil) -> [Note] {
         let notes = pinnedNotes + normalNotes
         
         if let searchTerm = searchTerm, searchTerm.isEmpty == false {
@@ -99,26 +56,26 @@ class BetterNoteManager {
         }
     }
     
-    func getNormalNotes() -> [BetterNote] {
+    func getNormalNotes() -> [Note] {
         return normalNotes
     }
     
-    func getArchivedNotes() -> [BetterNote] {
+    func getArchivedNotes() -> [Note] {
         return archivedNotes
     }
     
-    func getPinnedNotes() -> [BetterNote] {
+    func getPinnedNotes() -> [Note] {
         return pinnedNotes
     }
     
-    func getSecuredNotes(searchTerm: String? = nil) -> [BetterNote] {
+    func getSecuredNotes(searchTerm: String? = nil) -> [Note] {
         return getAllNotes(searchTerm: searchTerm).filter { $0.isSecured }
     }
     
     @discardableResult
     func addNote(title: String?, content: String?) -> UUID? {
         if title != "" || content != "" {
-            guard let note = BetterNote(title: title, content: content)
+            guard let note = Note(title: title, content: content)
             else { return nil }
             
             normalNotes.insert(note, at: 0)
@@ -153,7 +110,7 @@ class BetterNoteManager {
     
     @discardableResult
     func editNote(id: UUID, title: String?, content: String?) -> Bool {
-        func editNote(inArray: inout [BetterNote]) -> Bool {
+        func editNote(inArray: inout [Note]) -> Bool {
             guard let foundIndex = inArray.firstIndex(where: { $0.id == id }) else { return false }
             
             inArray[foundIndex].title = title
@@ -192,7 +149,7 @@ class BetterNoteManager {
     
     @discardableResult
     func secureNote(id: UUID, secure: Bool) -> Bool {
-        func secureNote(inArray: inout [BetterNote]) -> Bool {
+        func secureNote(inArray: inout [Note]) -> Bool {
             guard let foundIndex = inArray.firstIndex(where: { $0.id == id }) else { return false }
             inArray[foundIndex].isSecured = secure
             return true
@@ -203,7 +160,7 @@ class BetterNoteManager {
     
     @discardableResult
     func archiveNote(id: UUID, archive: Bool) -> Bool {
-        func archiveNote(fromArray: inout [BetterNote]) -> Bool {
+        func archiveNote(fromArray: inout [Note]) -> Bool {
             guard let foundIndex = fromArray.firstIndex(where: { $0.id == id }) else { return false }
             var note = fromArray.remove(at: foundIndex)
             note.isArchived = archive
@@ -228,7 +185,7 @@ class BetterNoteManager {
         }
     }
     
-    private func insertNormalNote(_ note: BetterNote) {
+    private func insertNormalNote(_ note: Note) {
         let insertAtIndex = normalNotes.firstIndex(where: { $0.dateCreated < note.dateCreated }) ?? normalNotes.count
         normalNotes.insert(note, at: insertAtIndex)
     }

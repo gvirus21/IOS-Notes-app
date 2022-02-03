@@ -1,5 +1,5 @@
 //
-//  NewHomeViewController.swift
+//  HomeVC.swift
 //  Notes
 //
 //  Created by Gourav Kumar on 24/01/22.
@@ -7,7 +7,9 @@
 
 import UIKit
 
-class NewHomeViewController: UIViewController {
+class HomeVC: UIViewController {
+    
+    var cellIdentifier: String { "NoteCell" }
     
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var searchField: UISearchBar!
@@ -15,6 +17,7 @@ class NewHomeViewController: UIViewController {
     
     
     let primaryColor = UIColor(hexaString: "#08070D")
+    let secondaryColor = UIColor(hexaString: "#202240")
     
     @IBOutlet var collectionView: UICollectionView!
     
@@ -23,7 +26,7 @@ class NewHomeViewController: UIViewController {
     
     var betterNoteManager = BetterNoteManager()
     
-    var notes: [BetterNote] {
+    var notes: [Note] {
         let notes = betterNoteManager.getAllNotes(searchTerm: searchField.text)
         
         if toggleArchivedNotes {
@@ -53,10 +56,43 @@ class NewHomeViewController: UIViewController {
         self.backupNotes()
     }
     
+    func setupUI() {
+        view.backgroundColor = primaryColor
+        
+        addButton.layer.cornerRadius = addButton.frame.width / 2
+        addButton.layer.masksToBounds = true
+    }
+    
+    func setupSearchField() {
+        searchField.placeholder = "search"
+        searchField.isTranslucent = true
+        searchField.barTintColor = primaryColor
+        searchField.searchTextField.textColor = .white
+        searchField.backgroundColor = primaryColor
+        self.tabBarController?.navigationItem.titleView = searchField
+        
+        searchField.delegate = self
+    }
+    
+    func setupCollectionView() {
+        collectionView.backgroundColor = .clear
+        
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        }
+        
+        let nib = UINib(nibName: "NoteCell", bundle: nil)
+        collectionView.register(nib, forCellWithReuseIdentifier: cellIdentifier)
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+    }
+    
     func goToCreateNoteScreen() {
         let sb: UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
         
-        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteVC
         vc.betterNoteManager = betterNoteManager
         
         vc.modalPresentationStyle = .fullScreen
@@ -67,15 +103,7 @@ class NewHomeViewController: UIViewController {
 
 //MARK: Setup functions
 
-extension NewHomeViewController {
-    func setupUI() {
-        view.backgroundColor = primaryColor
-        
-        collectionView.backgroundColor = .clear
-        
-        addButton.layer.cornerRadius = addButton.frame.width / 2
-        addButton.layer.masksToBounds = true
-    }
+extension HomeVC {
     
     func setupMenuButton() {
         menuButton.sizeToFit()
@@ -133,32 +161,10 @@ extension NewHomeViewController {
                                                                         ]))
     }
     
-    
-    func setupSearchField() {
-        searchField.placeholder = "search"
-        searchField.isTranslucent = true
-        searchField.barTintColor = primaryColor
-        searchField.searchTextField.textColor = .white
-        searchField.backgroundColor = primaryColor
-        self.tabBarController?.navigationItem.titleView = searchField
-        
-        searchField.delegate = self
-    }
-    
-    func setupCollectionView() {
-        let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: 400, height: 150)
-        
-        collectionView.collectionViewLayout = layout
-        collectionView.register(NoteCollectionViewCell.nib(), forCellWithReuseIdentifier: NoteCollectionViewCell.cellIdentifier)
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        
-    }
 }
 
 //MARK: Button Actions
-extension NewHomeViewController {
+extension HomeVC {
     @IBAction func addButtonPressed(_ sender: Any) {
         goToCreateNoteScreen()
     }
@@ -178,9 +184,9 @@ extension UIColor {
 
 //MARK: Searchbar extension
 
-extension NewHomeViewController: UISearchBarDelegate {
+extension HomeVC: UISearchBarDelegate {
 
-    @IBAction func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         collectionView.reloadData()
     }
@@ -189,14 +195,14 @@ extension NewHomeViewController: UISearchBarDelegate {
 
 //MARK: CollectionView delegates
 
-extension NewHomeViewController: UICollectionViewDelegate {
+extension HomeVC: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
             
         let sb = UIStoryboard(name: "Main", bundle:nil)
         
-        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteViewController
+        let vc = sb.instantiateViewController(withIdentifier: "addNoteVC") as! AddNoteVC
         vc.betterNoteManager = betterNoteManager
         vc.noteID = notes[indexPath.row].id
         
@@ -206,35 +212,56 @@ extension NewHomeViewController: UICollectionViewDelegate {
     // longpress action on collectionviewcell
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) {
-            _ in
+        
+        let note = self.notes[indexPath.row]
+        
+        let pinAction: UIAction = {
+            let title = note.isPinned ? "Unpin" : "Pin"
+            let imageName = note.isPinned ? "pin.circle.fill" : "pin.circle"
             
-            return UIMenu(
-                title: "",
+            let image = UIImage(systemName: imageName)
+            
+            return UIAction(title: title, image: image) { _ in
+                let shouldPin = !note.isPinned
+                self.betterNoteManager.pinNote(id: note.id, pin: shouldPin)
+                self.collectionView.reloadData()
+            }
+        }()
+        
+        let secureAction: UIAction = {
+            let title = note.isSecured ? "Unsecure" : "Secure"
+            let imageName = note.isSecured ? "lock.circle.fill" : "lock.circle"
+            
+            let image = UIImage(systemName: imageName)
+            
+            return UIAction(title: title, image: image) { _ in
+                let shouldSecure = !note.isSecured
+                self.betterNoteManager.secureNote(id: note.id, secure: shouldSecure)
+                self.collectionView.reloadData()
+            }
+        }()
+        
+        let archiveAction = UIAction(title: "Archive", image: UIImage(systemName: "archivebox.circle")) { _ in
+            let _archive = note.isArchived ? false : true
+            self.betterNoteManager.archiveNote(id: note.id, archive: _archive)
+            self.collectionView.reloadData()
+        }
+        
+        let deleteAction = UIAction(title: "Delete", image: UIImage(systemName: "trash.circle")) { _ in
+            self.betterNoteManager.deleteNote(id: note.id)
+            self.collectionView.reloadData()
+            self.backupNotes()
+        }
+        
+        let config = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
+            return UIMenu(title: "",
                           image: nil,
                           identifier: nil,
                           options: UIMenu.Options.displayInline,
-                          children: [
-                            UIAction(title: "Pin") { _ in
-                                let _pin = self.notes[indexPath.row].isPinned ? false : true
-                                self.betterNoteManager.pinNote(id: self.notes[indexPath.row].id, pin: _pin)
-                                self.collectionView.reloadData()
-                                },
-                            UIAction(title: "Secure") { _ in
-                                let _secure = self.notes[indexPath.row].isSecured ? false : true
-                                self.betterNoteManager.secureNote(id: self.notes[indexPath.row].id, secure: _secure)
-                                self.collectionView.reloadData()
-                                },
-                            UIAction(title: "Archive") { _ in
-                                let _archive = self.notes[indexPath.row].isArchived ? false : true
-                                self.betterNoteManager.archiveNote(id: self.notes[indexPath.row].id, archive: _archive)
-                                self.collectionView.reloadData()
-                            },
-                            UIAction(title: "Delete") { _ in
-                                self.betterNoteManager.deleteNote(id: self.notes[indexPath.row].id)
-                                self.collectionView.reloadData()
-                            }
-                              ]
+                          children: [pinAction,
+                                     secureAction,
+                                     archiveAction,
+                                     deleteAction]
             )
         }
         
@@ -245,7 +272,7 @@ extension NewHomeViewController: UICollectionViewDelegate {
 
 //MARK: CollectionView datasource
 
-extension NewHomeViewController: UICollectionViewDataSource {
+extension HomeVC: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return notes.count
@@ -253,31 +280,21 @@ extension NewHomeViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.cellIdentifier, for: indexPath) as! NoteCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath) as! NoteCell
         
         let note = notes[indexPath.row]
-        let cellVM = NoteCollectionViewCellVM(note: note)
+        let cellVM = NoteCellVM(note: note)
         cell.configure(viewModel: cellVM)
-        
-        cell.layer.cornerRadius = 20
-        cell.backgroundColor = UIColor(hexaString: "#202240")
+        cell.backgroundColor = secondaryColor
+        cell.layer.cornerRadius = 16
         
         return cell
     }
     
 }
 
-
-extension NewHomeViewController: UICollectionViewDelegateFlowLayout {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-
-        return CGSize(width: 400, height: 150)
-    }
-}
-
 //MARK: Read/Write from Disk
-extension NewHomeViewController {
+extension HomeVC {
     
     func backupNotes() {
         let contents = betterNoteManager.getPinnedNotes() + betterNoteManager.getNormalNotes() + betterNoteManager.getArchivedNotes()
@@ -302,7 +319,7 @@ extension NewHomeViewController {
         if let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(filename) {
             do {
                 let data = try Data(contentsOf: url)
-                let notes = try JSONDecoder().decode([BetterNote].self, from: data)
+                let notes = try JSONDecoder().decode([Note].self, from: data)
                 betterNoteManager.addNotes(notes)
                 collectionView.reloadData()
             } catch {

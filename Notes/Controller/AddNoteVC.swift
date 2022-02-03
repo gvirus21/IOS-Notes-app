@@ -7,7 +7,7 @@
 
 import UIKit
 
-class AddNoteViewController: UIViewController, UITextViewDelegate, UITextFieldDelegate {
+class AddNoteVC: UIViewController, UITextViewDelegate, UITextFieldDelegate {
     
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var noteTextView: UITextView!

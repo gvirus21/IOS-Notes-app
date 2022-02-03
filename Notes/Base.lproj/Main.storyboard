@@ -13,7 +13,7 @@
         <!--NewHomeViewController-->
         <scene sceneID="1Z6-kq-3lC">
             <objects>
-                <viewController title="NewHomeViewController" id="wFd-DF-BQr" customClass="NewHomeViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="NewHomeViewController" id="wFd-DF-BQr" customClass="HomeVC" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="vET-w6-PSp">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,7 +25,6 @@
                             </searchBar>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="33a-67-2Ih">
                                 <rect key="frame" x="10" y="201" width="408" height="681"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="I13-3t-C3U">
                                     <size key="itemSize" width="408" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -97,12 +96,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xfp-0L-Y6a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1832" y="-728"/>
+            <point key="canvasLocation" x="1856" y="-728"/>
         </scene>
-        <!--Add Note View Controller-->
+        <!--Add NoteVC-->
         <scene sceneID="yGU-aV-Xve">
             <objects>
-                <viewController storyboardIdentifier="addNoteVC" id="byK-92-MqN" customClass="AddNoteViewController" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="addNoteVC" id="byK-92-MqN" customClass="AddNoteVC" customModule="Notes" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="LjZ-dh-Joa">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -161,12 +160,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="wFd-DF-BQr" kind="relationship" relationship="rootViewController" id="euM-8Q-RQa"/>
+                        <segue destination="wFd-DF-BQr" kind="relationship" relationship="rootViewController" id="aNd-WI-by2"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gHv-Pr-piS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="928" y="-728"/>
+            <point key="canvasLocation" x="959" y="-728"/>
         </scene>
     </scenes>
     <resources>
